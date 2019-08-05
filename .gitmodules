@@ -1,0 +1,4 @@
+[submodule "ananthukrishna/hr_employee_expense_advances"]
+	path = ananthukrishna/hr_employee_expense_advances
+	url = git@github.com:ananthukrishna/hr_employee_expense_advances.git
+	branch = 12.0
