@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Access right for the Stage Assign User-->
+    <record id="group_stage_assign_user_show" model="res.groups">
+        <field name="name">Stage Assign User</field>
+     </record>
+</odoo>
