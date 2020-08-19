@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Extended the functionality of the edit project view form to add the field use task template  -->
+     <record id="project__view_form_inherited_to_add_assigened_user" model="ir.ui.view">
+        <field name="name">project.project</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+	    <xpath expr="//notebook[1]" position="inside">
+                <page string="Stage Assigened User" groups="abs_task_user_assignment.group_stage_assign_user_show">
+                    <br/>
+                    <field name="stage_project_ids">
+                        <tree string="Stage Assigened USer" editable="bottom">
+                            <field name="stage_id"/>
+                    	    <field name="user_id"/>
+                        </tree> 
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record> 
+</odoo>
