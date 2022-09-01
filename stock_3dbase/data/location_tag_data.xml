@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo noupdate="1">
+
+    <record id="stock_location_tag_good" model="stock.location.tag">
+        <field name="name">Good</field>
+        <field name="opacity">1000</field>
+        <field name="color">10</field>
+    </record>
+    <record id="stock_location_tag_normal" model="stock.location.tag">
+        <field name="name">Normal</field>
+        <field name="opacity">1000</field>
+        <field name="color">2</field>
+    </record>
+    <record id="stock_location_tag_bad" model="stock.location.tag">
+        <field name="name">Bad</field>
+        <field name="opacity">1000</field>
+        <field name="color">1</field>
+    </record>
+    <record id="stock_location_tag_locate" model="stock.location.tag">
+        <field name="name">Locate</field>
+        <field name="opacity">1000</field>
+        <field name="color">4</field>
+    </record>
+
+</odoo>

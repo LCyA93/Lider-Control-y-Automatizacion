@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="stock_location_tag_form_view">
+        <field name="name">stock.location.tag.form</field>
+        <field name="model">stock.location.tag</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="color"/>
+                    <field name="opacity"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="stock_location_tag_tree_view">
+        <field name="name">stock.location.tag.tree</field>
+        <field name="model">stock.location.tag</field>
+        <field name="arch" type="xml">
+            <tree string="Tags" editable="bottom">
+                <field name="name"/>
+                <field name="opacity"/>
+                <field name="color" widget="color_picker"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="stock_location_tag_act_window">
+        <field name="name">Location Tags</field>
+        <field name="res_model">stock.location.tag</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="stock_location_tag_menu">
+        <field name="name">Location Tags</field>
+        <field name="parent_id" ref="stock.menu_warehouse_config"/>
+        <field name="action" ref="stock_location_tag_act_window"/>
+        <field name="sequence" eval="16"/>
+    </record>
+
+    <record id="view_warehouse_tree_loc" model="ir.ui.view">
+        <field name="name">stock.warehouse.tree.loc</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="view_location_id" readonly="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_warehouse_loc" model="ir.ui.view">
+        <field name="name">stock.warehouse.loc</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[@class='oe_button_box']" position="inside">
+                <button type="object"
+                        name="action_open_stock_locations"
+                        class="oe_stat_button"
+                        icon="fa-list-alt"
+                        groups="stock.group_stock_user, stock.group_stock_manager"
+                        attrs="{'invisible': [('count_sl', '=', 0)]}" >
+                    <field name="count_sl" widget="statinfo" string="Locations"/>
+                </button>
+            </xpath>
+            <field name="code" position="after">
+                <field name="spacex"/>
+                <field name="spacey"/>
+                <field name="spacez"/>
+                <field name="planimetry_image" widget="image"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="act_warehouse_stock_locations" model="ir.actions.act_window">
+        <field name="name">Stock Locations</field>
+        <field name="res_model">stock.location</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_location_form_wh" model="ir.ui.view">
+        <field name="name">stock.location.form.wh</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_form"/>
+        <field name="arch" type="xml">
+            <field name="usage" position="after">
+                <field name="warehouse_id"/>
+                <field name="posx"/>
+                <field name="posy"/>
+                <field name="posz"/>
+                <field name="sizex"/>
+                <field name="sizey"/>
+                <field name="sizez"/>
+                <field name="barcode"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_location_tree2_wh" model="ir.ui.view">
+        <field name="name">stock.location.tree2.wh</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_tree2"/>
+        <field name="arch" type="xml">
+            <field name="usage" position="after">
+                <field name="warehouse_id"/>
+                <field name="barcode"/>
+                <field name="posx"/>
+                <field name="posy"/>
+                <field name="posz"/>
+                <field name="sizex"/>
+                <field name="sizey"/>
+                <field name="sizez"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_location_search_wh" model="ir.ui.view">
+        <field name="name">stock.location.search.wh</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="warehouse_id"/>
+                <field name="usage"/>
+                <group string="Group By" name="groupby">
+                    <filter name="gb_location_id" string="Parent Location" context="{'group_by': 'location_id'}"/>
+                    <filter name="gb_warehouse_id" string="Warehouse" context="{'group_by': 'warehouse_id'}"/>
+                    <filter name="gb_usage" string="Usage" context="{'group_by': 'usage'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

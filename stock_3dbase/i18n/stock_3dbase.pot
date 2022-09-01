@@ -1,0 +1,219 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* stock_3dbase
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-09-30 04:10+0000\n"
+"PO-Revision-Date: 2020-09-30 04:10+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_3dbase
+#: model:stock.location.tag,name:stock_3dbase.stock_location_tag_bad
+msgid "Bad"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location__barcode
+msgid "Barcode"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location_tag__color
+msgid "Color Index"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_warehouse__count_sl
+msgid "Count Stock Locations"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location_tag__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location_tag__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_warehouse__spacex
+msgid "Depth (X)"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location_tag__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:stock.location.tag,name:stock_3dbase.stock_location_tag_good
+msgid "Good"
+msgstr ""
+
+#. module: stock_3dbase
+#: model_terms:ir.ui.view,arch_db:stock_3dbase.view_location_search_wh
+msgid "Group By"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_warehouse__spacez
+msgid "Height (Z)"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location_tag__id
+msgid "ID"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model,name:stock_3dbase.model_stock_location
+msgid "Inventory Locations"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location_tag____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location_tag__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location_tag__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:stock.location.tag,name:stock_3dbase.stock_location_tag_locate
+msgid "Locate"
+msgstr ""
+
+#. module: stock_3dbase
+#: code:addons/stock_3dbase/models/stock.py:38
+#, python-format
+msgid "Location %s is used for warehouse '%s'"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.actions.act_window,name:stock_3dbase.stock_location_tag_act_window
+#: model:ir.model,name:stock_3dbase.model_stock_location_tag
+#: model:ir.ui.menu,name:stock_3dbase.stock_location_tag_menu
+msgid "Location Tags"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,help:stock_3dbase.field_stock_location__warehouse_id
+msgid "Location warehouse"
+msgstr ""
+
+#. module: stock_3dbase
+#: model_terms:ir.ui.view,arch_db:stock_3dbase.view_warehouse_loc
+msgid "Locations"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:stock.location.tag,name:stock_3dbase.stock_location_tag_normal
+msgid "Normal"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location_tag__opacity
+msgid "Opacity"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,help:stock_3dbase.field_stock_location__posx
+#: model:ir.model.fields,help:stock_3dbase.field_stock_location__posy
+#: model:ir.model.fields,help:stock_3dbase.field_stock_location__posz
+msgid "Optional localization details, for information purpose only"
+msgstr ""
+
+#. module: stock_3dbase
+#: model_terms:ir.ui.view,arch_db:stock_3dbase.view_location_search_wh
+msgid "Parent Location"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_warehouse__planimetry_image
+msgid "Planimetry Image"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location__posx
+msgid "Pos (X)"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location__posy
+msgid "Pos (Y)"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location__posz
+msgid "Pos (Z)"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location__sizex
+msgid "Size (X)"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location__sizey
+msgid "Size (Y)"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location__sizez
+msgid "Size (Z)"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.actions.act_window,name:stock_3dbase.act_warehouse_stock_locations
+msgid "Stock Locations"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location_tag__name
+msgid "Tag Name"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location__tag_ids
+msgid "Tags"
+msgstr ""
+
+#. module: stock_3dbase
+#: model_terms:ir.ui.view,arch_db:stock_3dbase.view_location_search_wh
+msgid "Usage"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model,name:stock_3dbase.model_stock_warehouse
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_location__warehouse_id
+#: model_terms:ir.ui.view,arch_db:stock_3dbase.view_location_search_wh
+msgid "Warehouse"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,help:stock_3dbase.field_stock_warehouse__planimetry_image
+msgid "Warehouse planimetry image"
+msgstr ""
+
+#. module: stock_3dbase
+#: model:ir.model.fields,field_description:stock_3dbase.field_stock_warehouse__spacey
+msgid "Width (Y)"
+msgstr ""
+

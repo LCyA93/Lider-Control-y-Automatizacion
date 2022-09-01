@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo noupdate="1">
+
+    <record id="stock3d_config_settings" model="res.config.settings">
+        <field name="group_stock_multi_locations" eval="True"/>
+    </record>
+
+</odoo>
