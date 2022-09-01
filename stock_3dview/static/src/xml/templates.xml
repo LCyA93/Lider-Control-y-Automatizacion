@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+    <div t-name="3DView" class="threedview">
+        <div id="threedview_container">
+            <span id="loading_icon" class="fa fa-refresh fa-spin fa-2x" aria-hidden="false" title="Loading..."></span>
+            <span id="fullscreen_icon" class="fa fa-arrows-alt fa-2x" aria-hidden="false" title="Fullscreen"></span>
+            <span id="legend_icon" class="fa fa-info-circle fa-2x" aria-hidden="false" title="Legend"></span>
+            <span id="coords_info_icon" class="fa fa-map-marker fa-2x" aria-hidden="false" title="Coords"></span>
+            <div id="coords">
+            </div>
+            <div id="legend" data-current="0">
+                <span id="close_legend_icon" class="fa fa-times" aria-hidden="false" title="Close"></span>
+                <div class="window_title">Legend</div>
+                <div id="legend_data"></div>
+            </div>
+            <div id="location_info" data-current="0">
+                <span id="close_location_info_icon" class="fa fa-times" aria-hidden="false" title="Close"></span>
+                <span id="location_data"></span>
+                <div id="products_data"></div>
+            </div>
+            <div id="barcode_label">
+            </div>
+            <div id="warehouses" data-current="0">
+                <div id="warehouses_choice"><select id="warehouse_id"></select></div>
+            </div>
+            <div id="dialog" title="Configuration error">
+                Error description.
+            </div>
+        </div>
+    </div>
+</templates>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="3dview assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+
+            <link type="text/css" href="/stock_3dview/static/src/css/style.css" rel="stylesheet" />
+
+            <script type="text/javascript" src="/stock_3dview/static/src/js/libs/three.min.js"></script>
+            <script type="text/javascript" src="/stock_3dview/static/src/js/libs/stats.min.js"></script>
+            <script type="text/javascript" src="/stock_3dview/static/src/js/libs/dat.gui.min.js"></script>
+            <script type="text/javascript" src="/stock_3dview/static/src/js/libs/OrbitControls.js"></script>
+            <script type="text/javascript" src="/stock_3dview/static/src/js/libs/Detector.js"></script>
+
+            <script type="text/javascript" src="/stock_3dview/static/src/js/renderer.js"></script>
+            <script type="text/javascript" src="/stock_3dview/static/src/js/model.js"></script>
+            <script type="text/javascript" src="/stock_3dview/static/src/js/threedview.js"></script>
+
+        </xpath>
+    </template>
+</odoo>

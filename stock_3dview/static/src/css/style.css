@@ -1,0 +1,233 @@
+#threedview_container {
+    background-color: #F0F0F0;
+    overflow: hidden;
+    padding-top: 10px;
+    padding-left: 10px;
+    text-align:center;
+}
+
+#info {
+    color: #00FFFF;
+    position: absolute;
+    top: 0px; width: 100%;
+    padding: 5px;
+}
+
+a {
+    color: red;
+}
+
+#loading_icon {
+    color: #A3498B;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 10;
+    display: block;
+    text-align: center;
+    opacity: 0.7;
+}
+
+#reload_icon.clickable {
+    cursor: pointer;
+}
+
+#fullscreen_icon {
+    color: #A3498B;
+    position: absolute;
+    top: 10px;
+    z-index: 10;
+    left: 16px;
+    cursor: pointer;
+}
+
+#legend_icon {
+    color: #A3498B;
+    position: absolute;
+    top: 10px;
+    z-index: 10;
+    right: 10px;
+    cursor: pointer;
+}
+
+#coords_info_icon {
+    color: #A3498B;
+    position: absolute;
+    top: 10px;
+    z-index: 10;
+    left: 44px;
+    cursor: pointer;
+}
+
+#toggle_arrowkeys_meaning_icon {
+    color: #A3498B;
+    position: absolute;
+    top: 10px;
+    z-index: 10;
+    right: 16px;
+    cursor: pointer;
+}
+
+#legend {
+    display: none;
+    border: 2px solid #A3498B;
+    border-radius: 5px;
+    padding: 10px 10px 10px 10px;
+    position: absolute;
+    z-index: 10;
+    background-color: white;
+    width: 200px;
+    text-align: left;
+    top: 40px;
+    right: 16px;
+}
+
+#legend_ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.colorbox {
+    width: 30px;
+    height: 16px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-right: 10px;
+}
+
+#location_info {
+    display: none;
+    border: 2px solid #A3498B;
+    border-radius: 5px;
+    padding: 10px 10px 10px 10px;
+    position: absolute;
+    z-index: 1;
+    background-color: white;
+    width: 300px;
+    text-align: left;
+}
+
+#frame_location_icon {
+    color: #4C4C4C;
+    cursor: pointer;
+    display: none;
+    width: 16px;
+    position: absolute;
+    top: 4px;
+    left: 20px;
+}
+
+#map_marker_icon {
+    color: #4C4C4C;
+    cursor: pointer;
+    display: none;
+    width: 16px;
+    position: absolute;
+    top: 4px;
+    left: 40px;
+}
+
+#close_location_info_icon {
+    color: #4C4C4C;
+    cursor: pointer;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+}
+
+#close_legend_icon {
+    color: #4C4C4C;
+    cursor: pointer;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+}
+
+.window_title {
+    text-align: center;
+    font-weight: bold;
+}
+
+#location_data {
+    position: absolute;
+    border: 1px solid #777777;
+    padding: 4px;
+    top: 2px;
+    left: 60px;
+    background-color: #E9E9F1;
+    color: #644c51;
+}
+
+#products_data {
+    position: absolute;
+    padding: 4px;
+    top: 32px;
+    left: 0px;
+    color: #644C51;
+    font-size: 0.8em;
+}
+
+#products_ul {
+    padding-left: 16px;
+}
+
+.fullscreen {
+    position:fixed;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    padding: 0 0 0 0 !important;
+    z-index: 5;
+}
+
+#coords {
+    position: absolute;
+    left: 44px;
+    top: 10px;
+    z-index: 10;
+    background-color: gray;
+    color: white;
+    font-style: monospace;
+    font-size: 12px;
+    display: none;
+    text-align: left;
+}
+
+#barcode_label {
+    display: none;
+    border: 1px solid #A3498B;
+    border-radius: 2px;
+    padding: 2px 2px 2px 2px;
+    position: absolute;
+    z-index: 1;
+    color: white;
+    background-color: #A3498B;
+    cursor: default;
+}
+
+#warehouses {
+    display: none;
+    border: 2px solid #A3498B;
+    border-radius: 5px;
+    padding: 2px 2px 2px 2px;
+    position: absolute;
+    z-index: 10;
+    background-color: white;
+    width: 200px;
+    text-align: left;
+    bottom: 16px;
+    left: 16px;
+}
+
+#dialog {
+    padding: 2px 2px 2px 2px;
+    position: absolute;
+    z-index: 10;
+    display: none;
+    top: 60px;
+    left: 40px;
+    text-align: center;
+    background-color: white;
+}

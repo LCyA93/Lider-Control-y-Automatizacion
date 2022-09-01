@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_picking_form_locate" model="ir.ui.view">
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='button_scrap']" position="after">
+                 <button string="Locate" name="action_locate"
+                    type="object" class="oe_stat_button" icon="fa-cubes" onclick="sessionStorage.setItem('customdata_request_type', 'picking_locations')"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="stock_picking_batch_form_locate" model="ir.ui.view">
+        <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form"/>
+        <field name="model">stock.picking.batch</field>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_print']" position="after">
+                 <button string="Locate" name="action_locate_batch"
+                    type="object" class="oe_stat_button" icon="fa-cubes" onclick="sessionStorage.setItem('customdata_request_type', 'batch_picking_locations')"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="stock_warehouse_form_locate" model="ir.ui.view">
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="model">stock.warehouse</field>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button string="Tagged Locations" name="action_locate_tagged_locations"
+                        type="object" class="oe_stat_button" icon="fa-cubes" onclick="sessionStorage.setItem('customdata_request_type', 'tagged')"/>
+                    <button string="Not Empty Locations" name="action_locate_not_empty_locations"
+                        type="object" class="oe_stat_button" icon="fa-cubes" onclick="sessionStorage.setItem('customdata_request_type', 'not_empty_locations')"/>
+                    <button string="Empty Locations" name="action_locate_empty_locations"
+                        type="object" class="oe_stat_button" icon="fa-cubes" onclick="sessionStorage.setItem('customdata_request_type', 'empty_locations')"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

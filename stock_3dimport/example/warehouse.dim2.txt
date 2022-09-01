@@ -1,0 +1,4 @@
+Depth (X) 	15000
+Width (Y) 	10000
+Height (Z) 	5000
+
