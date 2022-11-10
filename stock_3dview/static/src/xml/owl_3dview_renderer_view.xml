@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<template>
-    <t t-name="3DView" class="threedview">
+<templates xml:space="preserve">
+
+    <div t-name="stock_3dview.OWL3DViewRenderer" class="threedview" owl="1">
         <div id="threedview_container">
             <span id="loading_icon" class="fa fa-refresh fa-spin fa-2x" aria-hidden="false" title="Loading..."></span>
             <span id="fullscreen_icon" class="fa fa-arrows-alt fa-2x" aria-hidden="false" title="Fullscreen"></span>
@@ -27,5 +28,6 @@
                 Error description.
             </div>
         </div>
-    </t>
-</template>
+    </div>
+
+</templates>

@@ -96,7 +96,7 @@ a {
     margin-right: 10px;
 }
 
-#location_info {
+#item3d_info {
     display: none;
     border: 2px solid #A3498B;
     border-radius: 5px;
@@ -108,7 +108,7 @@ a {
     text-align: left;
 }
 
-#frame_location_icon {
+#frame_item3d_icon {
     color: #4C4C4C;
     cursor: pointer;
     display: none;
@@ -128,7 +128,7 @@ a {
     left: 40px;
 }
 
-#close_location_info_icon {
+#close_item3d_info_icon {
     color: #4C4C4C;
     cursor: pointer;
     position: absolute;
@@ -149,7 +149,7 @@ a {
     font-weight: bold;
 }
 
-#location_data {
+#item3d_data {
     position: absolute;
     border: 1px solid #777777;
     padding: 4px;
@@ -159,7 +159,7 @@ a {
     color: #644c51;
 }
 
-#products_data {
+#item3d_specific_info {
     position: absolute;
     padding: 4px;
     top: 32px;
@@ -168,9 +168,6 @@ a {
     font-size: 0.8em;
 }
 
-#products_ul {
-    padding-left: 16px;
-}
 
 .fullscreen {
     position:fixed;
@@ -207,7 +204,7 @@ a {
     cursor: default;
 }
 
-#warehouses {
+#areas {
     display: none;
     border: 2px solid #A3498B;
     border-radius: 5px;

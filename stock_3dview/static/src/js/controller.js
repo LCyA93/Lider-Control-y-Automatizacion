@@ -1,20 +1,13 @@
-odoo.define('stock_3dview.3DViewController', function (require) {
-    "use strict";
+/** @odoo-module alias=stock_3dview.3DViewController **/
 
-    var ajax = require('web.ajax');
-    var core = require('web.core');
-    const AbstractController = require('web.AbstractController');
+import BaseThreeDController from "3dview.3DViewController";
 
-    const ThreeDController = AbstractController.extend({});
-
-    const ThreeDViewController = ThreeDController.extend({
-
-        init: function (parent, context) {
-            scope = this;
-            this.context = context;
-            this._super.apply(this, arguments);
+var ThreeDViewController = BaseThreeDController.extend({
+    config: {
+        calls: {
+            settings: "/stock_3dview/get_settings",
         },
+    },
+});
 
-    return ThreeDViewController;
-    });
-
+export default ThreeDViewController;

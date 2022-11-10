@@ -1,51 +1,78 @@
-odoo.define('stock_3dview.3DView', function (require) {
-    "use strict";
+/** @odoo-module alias=stock_3dview.ThreeDView **/
 
-    var ajax = require('web.ajax');
-    var core = require('web.core');
-    var AbstractController = require('web.AbstractController');
-    var AbstractModel = require('stock_3dview.3DViewModel');
-    var AbstractRenderer = require('stock_3dview.3DViewRenderer');
-    var AbstractView = require('web.AbstractView');
-    var ControlPanel = require('web.ControlPanel');
-    ControlPanel.modelExtension = "ControlPanel";
-    var SearchPanel = require("web/static/src/js/views/search_panel.js");
-    SearchPanel.modelExtension = "SearchPanel";
-    
-    var data_manager = require('web.data_manager');
-    var session = require('web.session');
-    var view_registry = require('web.view_registry');
-    var _lt = core._lt;
-    var QWeb = core.qweb;
+import AbstractView from "web.AbstractView";
+import core from "web.core";
+import RendererWrapper from "web.RendererWrapper";
+import view_registry from "web.view_registry";
 
-    if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+import ThreeDViewController from "stock_3dview.3DViewController";
+import ThreeDModel from "stock_3dview.3DViewModel";
+import OWL3DViewRenderer from "stock_3dview.OWL3DViewRenderer";
 
-    var ThreeDView = AbstractView.extend({
-        config: {
-            Model: AbstractModel,
-            Controller: AbstractController,
-            Renderer: AbstractRenderer,
-            ControlPanel: ControlPanel,
-            SearchPanel: SearchPanel
-        },
+// Old version of the code
+// const AbstractRenderer = require("stock_3dview.3DViewRenderer");
+// const ThreeDRenderer = AbstractRenderer.extend({});
+// const ThreeDController = AbstractController.extend({});
+// const ThreeDModel = AbstractModel.extend({});
+const _lt = core._lt;
 
-        display_name: _lt('ThreeD View'),
-        icon: 'fa-cubes',
-        template: '3DView',
-        view_type: 'threedview',
+const ThreeDView = AbstractView.extend({
+    display_name: _lt("3D"),
+    icon: "fa-cubes",
+    config: _.extend({}, AbstractView.prototype.config, {
+        Model: ThreeDModel,
+        Controller: ThreeDViewController,
+        Renderer: OWL3DViewRenderer,
+    }),
+    viewType: "threedview",
+    searchMenuTypes: ["filter", "favorite"],
 
-        init: function (parent, context) {
-            this.context = context;
-            this.withSearchPanel = true;
-            this.withControlPanel = true;
-            this._super.apply(this, arguments);
-            return this;
-        },
+    init: function (viewInfo, params) {
+        this._super.apply(this, arguments);
+        const {
+            allAreas,
+            allItems,
+            selectedItems,
+            legend,
+            areaId,
+            settings,
+            item3dInfo,
+            gltf3dModel,
+            rendererArea,
+            noAreaLoaded,
+            noProduct,
+        } = this.arch.attrs;
+        Object.assign(this.modelParams, {allAreas, allItems, selectedItems, legend, areaId});
+        this.controllerParams.settingsRoute = settings;
+        Object.assign(this.rendererParams, {
+            item3dInfo,
+            gltf3dModel,
+            rendererArea,
+            noAreaLoaded,
+            noProduct,
+        });
+    },
 
-    });
+    _deriveActiveAreaIdFromContext(context) {
+        let activeAreaId = undefined;
+        if (
+            context &&
+            context.active_id &&
+            context.active_model &&
+            context.active_model == "stock.warehouse"
+        ) {
+            activeAreaId = context.active_id;
+        }
+        return activeAreaId;
+    },
 
-    view_registry.add('threedview', ThreeDView);
+    getRenderer(parent, state) {
+        let activeAreaId = this._deriveActiveAreaIdFromContext(this.loadParams.context);
+        state = Object.assign(state || {}, this.rendererParams, {activeAreaId});
+        return new RendererWrapper(parent, this.config.Renderer, state);
+    },
+});
 
-        return ThreeDView;
-    });
+view_registry.add("threedview", ThreeDView);
 
+export default ThreeDView;

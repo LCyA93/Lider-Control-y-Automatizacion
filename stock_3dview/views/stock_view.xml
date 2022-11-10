@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <record id="stock.action_location_form" model="ir.actions.act_window">
-        <field name="view_mode">tree,form,threedview</field>
-    </record>
-
-    <record id="view_stock_location_threed" model="ir.ui.view">
+    <record id="view_location_threed_threed" model="ir.ui.view">
         <field name="name">stock.location.threed</field>
         <field name="model">stock.location</field>
+        <field name="type">threedview</field>
+        <!--field name="auto_refresh" eval="10"></field-->
         <field name="arch" type="xml">
-            <threedview name="name">
+            <threedview 
+                name="3d View" 
+                allAreas="/stock_3dview/get_warehouses" 
+                allItems="/stock_3dview/get_locations/all" 
+                selectedItems="/stock_3dview/get_locations/"
+                legend="/stock_3dview/get_legend/"
+                areaId="warehouse_id"
+                rendererArea="warehouse"
+                settings="/stock_3dview/get_settings"
+                item3dInfo="/stock_3dview/get_location_info"
+                gltf3dModel="/stock_3dview/get_gltf_3d_model/"
+                noAreaLoaded="No areas have been loaded. Please check whether the areas have a planimetry image and the dimensions correctly set."
+                noProduct="No product."
+            >
             </threedview>
         </field>
-    </record>
-
-    <record id="stock_3dbase.act_warehouse_stock_locations" model="ir.actions.act_window">
-        <field name="view_mode">tree,form,threedview</field>
     </record>
 
     <record id="view_location_form_threed" model="ir.ui.view">
@@ -24,11 +31,47 @@
         <field name="arch" type="xml">
             <xpath expr="//sheet" position="before">
                 <header>
-                    <button string="3D View" name="threedView" type="object"
-                    class="oe_stat_button" icon="fa-cubes" onclick="sessionStorage.setItem('customdata_request_type', 'tagged');"/>
+                    <button string="3D View"
+                            name="threedView"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-cubes"/>
                 </header>
             </xpath>
         </field>
+    </record>
+
+    <record id="view_location_tree_threed" model="ir.ui.view">
+        <field name="inherit_id" ref="stock_3dbase.view_location_tree2_wh"/>
+        <field name="model">stock.location</field>
+        <field name="arch" type="xml">
+            <field name="usage" position="after">
+                <field name="scrap_location" optional="hide"/>
+                <field name="return_location" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_location_pivot_threed" model="ir.ui.view">
+        <field name="name">view.location.pivot.threed</field>
+        <field name="model">stock.location</field>
+        <field name="arch" type="xml">
+            <pivot string="Location">
+                <field name="create_date" type="row" interval="month" />
+                <field name="cyclic_inventory_frequency" type="measure" />
+            </pivot>
+        </field>
+    </record>
+
+    <record id="stock_3dbase.act_warehouse_stock_locations" model="ir.actions.act_window">
+        <field name="view_mode">tree,form,pivot,threedview</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'tree', 'view_id': ref('view_location_tree_threed')}),
+                      (0, 0, {'view_mode': 'form', 'view_id': ref('view_location_form_threed')}),
+                      (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_location_pivot_threed')}),
+                      (0, 0, {'view_mode': 'threedview', 'view_id': ref('view_location_threed_threed')})]"/>
+        <field name="search_view_id" ref="stock_3dbase.view_location_search_wh" />
     </record>
 
 </odoo>

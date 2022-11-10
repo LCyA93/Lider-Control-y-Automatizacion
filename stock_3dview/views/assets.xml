@@ -10,8 +10,13 @@
             <script type="text/javascript" src="/stock_3dview/static/src/js/libs/dat.gui.min.js"></script>
             <script type="text/javascript" src="/stock_3dview/static/src/js/libs/OrbitControls.js"></script>
             <script type="text/javascript" src="/stock_3dview/static/src/js/libs/Detector.js"></script>
+            <script type="text/javascript" src="/stock_3dview/static/src/js/libs/GLTFLoader.js"></script>
 
+            <script type="text/javascript" src="/stock_3dview/static/src/js/base_3dview_controller.js"></script>
+            <script type="text/javascript" src="/stock_3dview/static/src/js/controller.js"></script>
+            <script type="text/javascript" src="/stock_3dview/static/src/js/base_3dview_renderer.js"></script>
             <script type="text/javascript" src="/stock_3dview/static/src/js/renderer.js"></script>
+            <script type="text/javascript" src="/stock_3dview/static/src/js/base_3dview_model.js"></script>
             <script type="text/javascript" src="/stock_3dview/static/src/js/model.js"></script>
             <script type="text/javascript" src="/stock_3dview/static/src/js/threedview.js"></script>
 
