@@ -15,6 +15,7 @@ Contributors
 ------------
 * Andrea Piovesana <andrea.m.piovesana@gmail.com>
 * Loris Tissino <loris.tissino@gmail.com>
+* PhilDL <contact@codingdodo.com>
 
 Sponsors
 --------
@@ -33,7 +34,7 @@ Maintainers
 Further information
 ===================
 
-HTML Description: https://apps.odoo.com/apps/modules/12.0/stock_3dbase/
+HTML Description: https://apps.odoo.com/apps/modules/15.0/stock_3dbase/
 
 Usage instructions: `<readme/USAGE.rst>`_
 

@@ -1,4 +1,4 @@
-# Copyright 2020 Openindustry.it SAS
+# Copyright 2022 Openindustry.it SAS
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import http, tools, _
 from odoo.http import request
@@ -13,31 +13,33 @@ class ThreeDViewController(http.Controller):
     _color = '#875A7B'
     _opacity = 700
 
-    @http.route('/3dview/get_legend/picking_locations', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_legend/picking_locations', type='json', auth="user", methods=['POST'])
     def get_legend_stock_picking(self, domain, **kwargs):
         return self._get_legend("picking", **kwargs)
 
-    @http.route('/3dview/get_legend/batch_picking_locations', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_legend/batch_picking_locations', type='json', auth="user", methods=['POST'])
     def get_legend_stock_picking_batch(self, domain, **kwargs):
         return self._get_legend("batch picking", **kwargs)
 
-    @http.route('/3dview/get_legend/empty_locations', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_legend/empty_locations', type='json', auth="user", methods=['POST'])
     def get_legend_empty_locations(self, domain, **kwargs):
         return self._get_legend("empty", **kwargs)
 
-    @http.route('/3dview/get_legend/not_empty_locations', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_legend/not_empty_locations', type='json', auth="user", methods=['POST'])
     def get_legend_full_locations(self, domain, **kwargs):
         return self._get_legend("not empty", **kwargs)
 
-    @http.route('/3dview/get_locations/picking_locations', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_locations/picking_locations', type='json', auth="user", methods=['POST'])
     def get_locations_stock_picking(self, domain=[], **kwargs):
-        return self._get_locations(domain, self._color, **kwargs)
+        test = self._get_locations(domain, self._color, **kwargs)
+        _logger.warning("test: %s" % test)
+        return test
 
-    @http.route('/3dview/get_locations/batch_picking_locations', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_locations/batch_picking_locations', type='json', auth="user", methods=['POST'])
     def get_locations_stock_picking_batch(self, domain=[], **kwargs):
         return self._get_locations(domain, self._color, **kwargs)
 
-    @http.route('/3dview/get_locations/empty_locations', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_locations/empty_locations', type='json', auth="user", methods=['POST'])
     def get_locations_empty_locations(self, domain=[], **kwargs):
         all_locations_ids = request.env['stock.location'].search(domain).ids
         full_locations_ids = request.env['stock.quant'].search(
@@ -48,7 +50,7 @@ class ThreeDViewController(http.Controller):
         domain = [('id', 'in', empty_locations_ids)]
         return self._get_locations(domain, self._color, **kwargs)
 
-    @http.route('/3dview/get_locations/not_empty_locations', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_locations/not_empty_locations', type='json', auth="user", methods=['POST'])
     def get_locations_full_locations(self, domain=[], **kwargs):
         return self._get_locations(domain, self._color, **kwargs)
 

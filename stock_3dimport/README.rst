@@ -33,7 +33,7 @@ Maintainers
 Further information
 ===================
 
-HTML Description: https://apps.odoo.com/apps/modules/12.0/stock_3dimport/
+HTML Description: https://apps.odoo.com/apps/modules/15.0/stock_3dimport/
 
 Usage instructions: `<readme/USAGE.rst>`_
 

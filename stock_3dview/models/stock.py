@@ -13,5 +13,6 @@ class StockLocation(models.Model):
             'view_mode': 'threedview',
             'res_model': 'stock.location',
             'domain': [('id', 'child_of', self.id)],
+            'context': dict(self.env.context, request_type='tagged')
         }
 

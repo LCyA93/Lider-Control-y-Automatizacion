@@ -22,7 +22,8 @@
             <tree string="Tags" editable="bottom">
                 <field name="name"/>
                 <field name="opacity"/>
-                <field name="color" widget="color_picker"/>
+                <field name="color"
+                       widget="color_picker"/>
             </tree>
         </field>
     </record>
@@ -42,13 +43,50 @@
         <field name="sequence" eval="16"/>
     </record>
 
+    <record model="ir.ui.view" id="stock_location_shape_form_view">
+        <field name="name">stock.location.shape.form.view</field>
+        <field name="model">stock.location.shape</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="shape_file"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="stock_location_shape_tree_view">
+        <field name="name">stock.location.shape.tree</field>
+        <field name="model">stock.location.shape</field>
+        <field name="arch" type="xml">
+            <tree string="shapes">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="stock_location_shape_act_window" model="ir.actions.act_window">
+        <field name="name">Location Shapes</field>
+        <field name="res_model">stock.location.shape</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.menu" id="stock_location_shape_menu">
+        <field name="name">Location Shapes</field>
+        <field name="parent_id" ref="stock.menu_warehouse_config"/>
+        <field name="action" ref="stock_location_shape_act_window"/>
+        <field name="sequence" eval="17"/>
+    </record>
+
     <record id="view_warehouse_tree_loc" model="ir.ui.view">
         <field name="name">stock.warehouse.tree.loc</field>
         <field name="model">stock.warehouse</field>
         <field name="inherit_id" ref="stock.view_warehouse_tree"/>
         <field name="arch" type="xml">
             <field name="name" position="after">
-                <field name="view_location_id" readonly="1"/>
+                <field name="view_location_id"
+                       readonly="1"/>
             </field>
         </field>
     </record>
@@ -72,7 +110,8 @@
                 <field name="spacex"/>
                 <field name="spacey"/>
                 <field name="spacez"/>
-                <field name="planimetry_image" widget="image"/>
+                <field name="planimetry_image"
+                       widget="image"/>
             </field>
         </field>
     </record>
@@ -90,14 +129,24 @@
         <field name="arch" type="xml">
             <field name="usage" position="after">
                 <field name="warehouse_id"/>
+                <field name="barcode"/>
+                <field name="tag_ids"
+                       widget="many2many_tags"
+                       options="{'color_field': 'color'}"/>
                 <field name="posx"/>
                 <field name="posy"/>
                 <field name="posz"/>
                 <field name="sizex"/>
                 <field name="sizey"/>
                 <field name="sizez"/>
-                <field name="barcode"/>
-                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="rotx"/>
+                <field name="roty"/>
+                <field name="rotz"/>
+                <field name="scale_factor"/>
+                <field name="shape_id"/>
+                <field name="gltf_3d_model"
+                           widget="model_viewer"
+                           style="width:400px; height:300px; background-color: #FFFFFF;"/>
             </field>
         </field>
     </record>
@@ -116,7 +165,9 @@
                 <field name="sizex"/>
                 <field name="sizey"/>
                 <field name="sizez"/>
-                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="tag_ids"
+                       widget="many2many_tags"
+                       options="{'color_field': 'color'}"/>
             </field>
         </field>
     </record>

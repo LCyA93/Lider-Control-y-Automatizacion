@@ -4,6 +4,7 @@ from odoo import http, tools, _
 from odoo.http import request
 import json
 import logging
+import base64
 
 _logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -27,11 +28,12 @@ class ThreeDViewController(http.Controller):
         }
 
 
-    @http.route('/3dview/get_locations/all', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_locations/all', type='json', auth="user", methods=['POST'])
     def get_locations_stock_warehouse(self, domain=[], **kwargs):
+        #print("locations/all")
         return self.get_locations(domain, **kwargs)
 
-    @http.route('/3dview/get_locations/tagged', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_locations/tagged', type='json', auth="user", methods=['POST'])
     def get_locations(self, domain=[], **kwargs):
         domain.extend((
             ('sizex', '>', 0),
@@ -48,6 +50,14 @@ class ThreeDViewController(http.Controller):
             else:
                 color = '#8F8F8F'
                 opacity = 500
+            # shape
+            shape_file = ''
+            if location['shape_id']:
+                shape_file = location['shape_id']['shape_file'].decode()
+            # gltf
+            gltf_file = ''
+            if location['gltf_3d_model']:
+                gltf_file = location['gltf_3d_model'].decode()
             values.append( {
                 'posx': location['posx'],
                 'posy': location['posy'],
@@ -55,6 +65,12 @@ class ThreeDViewController(http.Controller):
                 'sizex': location['sizex'],
                 'sizey': location['sizey'],
                 'sizez': location['sizez'],
+                'rotx': location['rotx'],
+                'roty': location['roty'],
+                'rotz': location['rotz'],
+                'scale_factor': location['scale_factor'],
+                'geometry': shape_file,
+                'gltf': gltf_file,
                 'opacity': opacity,
                 'barcode': location['barcode'],
                 'color': color,
@@ -64,7 +80,7 @@ class ThreeDViewController(http.Controller):
 
         return json.dumps(values)
 
-    @http.route('/3dview/get_warehouses', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_warehouses', type='json', auth="user", methods=['POST'])
     def get_warehouses(self, domain, **kwargs):
         # warehouse
         warehouses = request.env['stock.warehouse'].search([
@@ -96,7 +112,7 @@ class ThreeDViewController(http.Controller):
 
         return json.dumps(values)
 
-    @http.route('/3dview/get_legend/tagged', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_legend/tagged', type='json', auth="user", methods=['POST'])
     def get_legend(self, domain, **kwargs):
         tags = request.env['stock.location.tag'].search([])
         values = []
@@ -114,7 +130,7 @@ class ThreeDViewController(http.Controller):
         return self.get_legend(domain, **kwargs)
     '''
 
-    @http.route('/3dview/get_info', type='json', auth="user", methods=['POST'])
+    @http.route('/stock_3dview/get_location_info', type='json', auth="user", methods=['POST'])
     def get_info(self, domain, **kwargs):
         locations = request.env['stock.location'].search(domain)
         sq = []
@@ -123,6 +139,7 @@ class ThreeDViewController(http.Controller):
                 'product_name': stock_quant.product_id.name,
                 'product_qty': stock_quant.quantity,
                 'product_code': stock_quant.product_id.default_code,
+                'product_lot': stock_quant.lot_id.name,
             })
         return json.dumps({
                 'barcode': locations[0]['barcode'],
@@ -131,5 +148,26 @@ class ThreeDViewController(http.Controller):
                 'camy': locations[0]['posy']+1500,
                 'camz': 1800,
                 'complete_name': locations[0]['complete_name'],
-                'products': sq,
+                'specific_info': self.format_specific_info(sq),
             })
+            
+    def format_specific_info(self, sq):
+        
+        if len(sq)==0:
+            return '<p>No product is stored here at the moment.</p>'
+        
+        html = '<ul style="padding-left: 16px;">'
+        for p in sq:
+            code = ''
+            if p['product_code'] and p['product_lot']:
+                code = p['product_code'] + ' lot:' + p['product_lot']
+            elif p['product_code'] and not p['product_lot']:
+                code = p['product_code']
+            elif not p['product_code'] and p['product_lot']:
+                code = 'lot:' + p['product_lot']
+            name = p['product_name'] if p['product_name'] else ''
+            html += '<li>' + code + ': ' + name + '(' + str(p['product_qty']) + ')</li>'
+        
+        html += '</ul>'
+        
+        return html

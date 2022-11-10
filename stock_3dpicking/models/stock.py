@@ -1,4 +1,4 @@
-# Copyright 2020 Openindustry.it SAS
+# Copyright 2022 Openindustry.it SAS
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import models, fields, api, _
 
@@ -6,7 +6,6 @@ from odoo import models, fields, api, _
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-    #@api.multi
     def action_locate(self):
         product_ids = []
         location_ids = []
@@ -16,17 +15,16 @@ class StockPicking(models.Model):
             'name': _('Picking'),
             'type': 'ir.actions.act_window',
             'customdata_request_type': 'picking_locations',
-            #'view_type': 'threedview',
             'view_mode': 'threedview',
             'res_model': 'stock.location',
             'domain': [('id', 'in', location_ids)],
+            'context': dict(self.env.context, request_type='picking_locations')
         }
 
 
 class StockPickingBatch(models.Model):
     _inherit = 'stock.picking.batch'
 
-    #@api.multi
     def action_locate_batch(self):
         batch_product_ids = []
         batch_location_ids = []
@@ -41,30 +39,28 @@ class StockPickingBatch(models.Model):
             'name': _('Batch'),
             'type': 'ir.actions.act_window',
             'customdata_request_type': 'batch_picking_locations',
-            #'view_type': 'threedview',
             'view_mode': 'threedview',
             'res_model': 'stock.location',
             'domain': [('id', 'in', batch_location_ids)],
+            'context': dict(self.env.context, request_type='batch_picking_locations')
         }
 
 
 class StockWarehouse(models.Model):
     _inherit = 'stock.warehouse'
 
-    #@api.multi
     def action_locate_tagged_locations(self):
         location_ids = self.env['stock.location'].search([('warehouse_id', '=', self.id)]).ids
         return {
             'name': _('Warehouse'),
             'customdata_request_type': 'tagged',
             'type': 'ir.actions.act_window',
-            #'view_type': 'threedview',
             'view_mode': 'threedview',
             'res_model': 'stock.location',
             'domain': [('id', 'in', location_ids)],
+            'context': dict(self.env.context, request_type='tagged')
         }
 
-    #@api.multi
     def action_locate_empty_locations(self):
         all_locations_ids = self.env['stock.location'].search(
             [('warehouse_id', '=', self.id)]
@@ -79,13 +75,12 @@ class StockWarehouse(models.Model):
             'name': _('Warehouse'),
             'customdata_request_type': 'empty_locations',
             'type': 'ir.actions.act_window',
-            #'view_type': 'threedview',
             'view_mode': 'threedview',
             'res_model': 'stock.location',
             'domain': [('id', 'in', empty_locations_ids)],
+            'context': dict(self.env.context, request_type='empty_locations')
         }
 
-    #@api.multi
     def action_locate_not_empty_locations(self):
         full_locations_ids = self.env['stock.quant'].search(
             [('location_id.warehouse_id', '=', self.id),
@@ -96,8 +91,8 @@ class StockWarehouse(models.Model):
             'name': _('Warehouse'),
             'customdata_request_type': 'not_empty_locations',
             'type': 'ir.actions.act_window',
-            #'view_type': 'threedview',
             'view_mode': 'threedview',
             'res_model': 'stock.location',
-            'domain': [('id', 'in', full_locations_ids)]
+            'domain': [('id', 'in', full_locations_ids)],
+            'context': dict(self.env.context, request_type='not_empty_locations')
         }
