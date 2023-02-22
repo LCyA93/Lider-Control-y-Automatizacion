@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="account_invoice_form_addenda">
+            <field name="name">account.invoice.form.addenda</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/notebook/page/field[@name='invoice_line_ids']" position="after">
+                    <field name="addenda" widget="text" options="{'height': 100}" string="Addenda"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
