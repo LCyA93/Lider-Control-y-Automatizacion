@@ -1,1 +1,0 @@
-# Lider-Control-y-Automatizacion
