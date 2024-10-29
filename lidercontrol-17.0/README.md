@@ -1,0 +1,2 @@
+# lidercontrol
+LIDER CONTROL Y AUTOMATIZACION
