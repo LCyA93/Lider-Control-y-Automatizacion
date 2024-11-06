@@ -9,7 +9,7 @@
                    <field name="addenda_orderid"/>
              </xpath>
             <xpath expr="//notebook" position="inside">
-            <page name="addenda_orderid" string="Addenda OrderId" attrs="{'invisible':[('addenda_orderid', '=', False)]}">
+            <page name="addenda_orderid" string="Addenda OrderId" invisible="not addenda_orderid">
                   <group cols="4">
                     <group>
                          <field name="orderid"/>
