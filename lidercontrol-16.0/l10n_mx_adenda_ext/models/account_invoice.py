@@ -53,4 +53,3 @@ class AccountInvoice(models.Model):
                 except Exception as e:
                     _logger.error(str(e))
                     pass
-
