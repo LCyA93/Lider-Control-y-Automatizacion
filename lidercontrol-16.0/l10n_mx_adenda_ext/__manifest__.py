@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
-#                 @author IT Admin
+#                 @author Kevin Hernández Velázquez
 #
 ##############################################################################
 
 {
-    'name': 'Adenda Order ID',
-    'version': '16.01',
+    'name': 'Addenda Order ID',
+    'version': '17.01',
     'description': ''' Agrega campos para agregar una addenda.
     ''',
     'category': 'Accounting',
-    'author': 'IT Admin',
-    'website': 'www.itadmin.com.mx',
+    'author': 'Kevin Hernández',
+    'website': 'www.lidercontrol.com.mx',
     'depends': [
         'sale',
     ],
