@@ -7,6 +7,7 @@
 {
     'name': 'Adenda Order ID',
     'version': '16.01',
+    'license': 'LGPL-3',
     'description': ''' Agrega campos para agregar una addenda.
     ''',
     'category': 'Accounting',
