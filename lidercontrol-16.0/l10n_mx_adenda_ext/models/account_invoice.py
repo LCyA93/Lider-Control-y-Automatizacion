@@ -19,6 +19,35 @@ class AccountInvoice(models.Model):
     orderid = fields.Char(string='Order Identification')
 
     def _get_l10n_mx_edi_signed_edi_document(self):
+        self.ensure_one()
+        if self.l10n_mx_edi_cfdi_attachment_id:
+            _logger.info("Signed document found: %s", self.l10n_mx_edi_cfdi_attachment_id.name)
+
+            # Registra todos los documentos y sus atributos
+            for document in self.edi_document_ids:
+                _logger.info(
+                    "Document ID: %s, Code: %s, Attachment: %s",
+                    document.id,
+                    document.edi_format_id.code,
+                    document.sudo().attachment_id.name if document.sudo().attachment_id else "No attachment"
+                )
+
+            # Aplica el filtro Simple
+            signed_document = self.l10n_mx_edi_document_ids.filtered(lambda document: document.sudo().attachment_id)
+
+            # Aplica el filtro Simple Complejo No Funciona
+            # signed_document = self.edi_document_ids.filtered(lambda document: document.edi_format_id.code in ['cfdi_3_3', 'cfdi_4_0'] and document.sudo().attachment_id)
+
+            if signed_document:
+                _logger.info("Signed document found for record: %s", self.id)
+                return signed_document
+            else:
+                _logger.warning("No signed document passed the filter for record: %s", self.id)
+        else:
+            _logger.warning("No CFDI attachment ID found for record: %s", self.id)
+        return None
+
+    def _get_l10n_mx_edi_signed_edi_document(self):
         signed_document = super(AccountInvoice, self)._get_l10n_mx_edi_signed_edi_document()
         if not signed_document:
             _logger.warning("Método _get_l10n_mx_edi_signed_edi_document no devolvió un documento.")
