@@ -5,11 +5,9 @@ import xml.etree.ElementTree as gfg
 import logging
 import os
 import io
-
 _logger = logging.getLogger(__name__)
 import base64
 from odoo.exceptions import UserError
-
 
 class AccountInvoice(models.Model):
     _inherit = 'account.move'
@@ -46,15 +44,6 @@ class AccountInvoice(models.Model):
         else:
             _logger.warning("No CFDI attachment ID found for record: %s", self.id)
         return None
-
-    def _get_l10n_mx_edi_signed_edi_document(self):
-        signed_document = super(AccountInvoice, self)._get_l10n_mx_edi_signed_edi_document()
-        if not signed_document:
-            _logger.warning("Método _get_l10n_mx_edi_signed_edi_document no devolvió un documento.")
-            return None
-        else:
-            _logger.info("Método _get_l10n_mx_edi_signed_edi_document devolvió: %s", signed_document.attachment_id.name)
-            return signed_document
 
     def action_add_addenda_orderid(self):
         if not self.addenda_orderid:
