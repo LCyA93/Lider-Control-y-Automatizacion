@@ -18,15 +18,6 @@ class AccountInvoice(models.Model):
     addenda_id_agregada = fields.Boolean(string='Addenda agregada', readonly=True, default=False)
     orderid = fields.Char(string='Order Identification')
 
-    def _get_l10n_mx_edi_signed_edi_document(self):
-        signed_document = super(AccountInvoice, self)._get_l10n_mx_edi_signed_edi_document()
-        if not signed_document:
-            _logger.warning("Método _get_l10n_mx_edi_signed_edi_document no devolvió un documento.")
-            return None
-        else:
-            _logger.info("Método _get_l10n_mx_edi_signed_edi_document devolvió: %s", signed_document.attachment_id.name)
-            return signed_document
-
     def action_add_addenda_orderid(self):
         if not self.addenda_orderid:
             raise UserError(_('No está habilitado para generar la addenda.'))
