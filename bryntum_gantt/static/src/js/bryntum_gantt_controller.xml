@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="bryntum_gantt.ControllerView">
+        <Layout display="props.display" className="'h-100 overflow-auto'">
+                <t t-component="props.Renderer" />
+
+        </Layout>
+    </t>
+</templates>

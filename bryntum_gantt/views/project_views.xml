@@ -1,0 +1,246 @@
+<odoo>
+    <data>
+        <record id="bryntum_gantt__view_form" model="ir.ui.view">
+            <field name="name">bryntum_gantt_view_form</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <BryntumGantt />
+            </field>
+        </record>
+
+        <record id="open_gantt_pro" model="ir.actions.act_window">
+            <field name="name">Gantt View Pro</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">BryntumGantt</field>
+        </record>
+
+        <menuitem
+            name="Gantt View Pro"
+            id="menu_bryntum_gantt_pro"
+            parent="project.menu_main_pm"
+            sequence="3"
+            action="open_gantt_pro"
+            groups="project.group_project_user,project.group_project_manager,base.group_user"
+        />
+
+        <record
+            id="project.act_project_project_2_project_task_all"
+            model="ir.actions.act_window"
+        >
+            <field
+                name="view_mode"
+            >kanban,list,form,calendar,pivot,graph,activity,BryntumGantt</field>
+        </record>
+
+        <record id="project.action_view_task" model="ir.actions.act_window">
+            <field
+                name="view_mode"
+            >kanban,list,form,calendar,pivot,graph,BryntumGantt</field>
+        </record>
+
+        <record id="project_task_view_form" model="ir.ui.view">
+            <field name="name">project_task_view_form</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[last()]" position="after">
+                    <page name="bryntum_config" string="Bryntum Gantt Fields">
+                        <group col="4">
+                            <field name="percent_done" />
+                            <field name="effort" />
+                            <field name="scheduling_mode" />
+                            <field name="constraint_type" />
+                            <field name="constraint_date" widget="date" />
+                            <field name="effort_driven" />
+                            <field name="manually_scheduled" />
+                            <field name="replace_user_by_employee" invisible="1" />
+                        </group>
+                    </page>
+                </xpath>
+                <!--FORM VIEW: employees always visible, user_id invisible if setting on
+                as in specs #10855 -->
+                <xpath expr="//field[@name='user_ids']" position="attributes">
+                    <attribute name="invisible">replace_user_by_employee</attribute>
+                </xpath>
+                <xpath expr="//field[@name='user_ids']" position="after">
+                    <field
+                        name="employee_ids"
+                        class="o_task_user_field"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        widget="many2many_avatar_user"
+                        invisible="0"
+                    />
+                </xpath>
+                <xpath
+                    expr="//page[@name='sub_tasks_page']/field[@name='child_ids']/list//field[@name='user_ids']"
+                    position="after"
+                >
+                    <field name="replace_user_by_employee" column_invisible="1" />
+                </xpath>
+                <xpath
+                    expr="//page[@name='sub_tasks_page']/field[@name='child_ids']/list//field[@name='user_ids']"
+                    position="attributes"
+                >
+                    <attribute
+                        name="column_invisible"
+                    >parent.replace_user_by_employee</attribute>
+                </xpath>
+                <xpath
+                    expr="//page[@name='sub_tasks_page']/field[@name='child_ids']/list//field[@name='user_ids']"
+                    position="after"
+                >
+                    <field
+                        name="employee_ids"
+                        class="o_task_user_field"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        widget="many2many_avatar_user"
+                        optional="show"
+                    />
+                </xpath>
+            </field>
+        </record>
+        <record id="project_task_view_quick_create_form" model="ir.ui.view">
+            <field name="name">project_task_view_quick_create_form</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.quick_create_task_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_ids']" position="after">
+                    <field name="replace_user_by_employee" invisible="1" />
+                </xpath>
+                <xpath expr="//field[@name='user_ids']" position="attributes">
+                    <attribute name="invisible">replace_user_by_employee</attribute>
+                </xpath>
+                <xpath expr="//field[@name='user_ids']" position="after">
+                    <!--employee field always visible on form , as in specs #10855 -->
+                    <field
+                        name="employee_ids"
+                        class="o_task_user_field"
+                        options="{'no_open': True, 'no_quick_create': True}"
+                        widget="many2many_avatar_user"
+                        invisible="0"
+                    />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="project_task_view_tree" model="ir.ui.view">
+            <field name="name">project_task_view_tree</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_tree2" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="before">
+                    <field
+                        name="employee_ids"
+                        optional="show"
+                        widget="many2many_avatar_user"
+                    />
+                    <field name="percent_done" />
+                    <field name="assigned_ids" widget="many2many_tags" />
+                </xpath>
+            </field>
+        </record>
+        <record id="project_task_view_search" model="ir.ui.view">
+            <field name="name">project_task_view_search</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_search_form" />
+            <field name="arch" type="xml">
+                <!--employee always visible in search, as in specs #10855 -->
+                <xpath expr="//field[@name='user_ids']" position="after">
+                    <field name="employee_ids" />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="project_task_view_kanban" model="ir.ui.view">
+            <field name="name">project_task_view_kanban</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_kanban" />
+            <field name="arch" type="xml">
+                <!--KANBAN VIEW: employees visible if setting on, user_id invisible if
+                    setting on as in specs #10855  -->
+                <templates position="before">
+                    <field name="replace_user_by_employee" />
+                </templates>
+                <xpath expr="///kanban//field[@name='user_ids']" position="after">
+                    <t
+                        t-if="record.employee_ids.raw_value and record.replace_user_by_employee.raw_value == true "
+                    >
+                        <field name="employee_ids" widget="many2many_avatar_user" />
+                    </t>
+                </xpath>
+                <xpath expr="///kanban//field[@name='user_ids']" position="replace">
+                    <field
+                        t-if="record.employee_ids.raw_value and record.replace_user_by_employee.raw_value == false "
+                        name="user_ids"
+                        widget="many2many_avatar_user"
+                    />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_edit_project_inherit_form" model="ir.ui.view">
+            <field name="name">project.project.view.inherit</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[last()]" position="after">
+                    <page name="bryntum_fields" string="Bryntum Gantt Fields">
+                    <div name="project_start_date">
+                        <div>
+                            <label
+                                    for="project_start_date"
+                                    class="oe_inline"
+                                    string="Project start:"
+                                />
+                            <field
+                                    name="project_start_date"
+                                    class="oe_inline oe_input_align"
+                                />
+                        </div>
+                    </div>
+                    <div
+                            class="row mt16 o_settings_container"
+                            id="gantt_view_pro_management"
+                        >
+                        <div
+                                id="use_collaborative_pad"
+                                class="col-12 col-lg-6 o_setting_box"
+                            >
+                            <div class="o_setting_left_pane">
+                                <field name="bryntum_auto_scheduling" />
+                            </div>
+                            <div
+                                    class="o_setting_right_pane"
+                                    name="pad_project_right_pane"
+                                >
+                                <label for="bryntum_auto_scheduling" />
+                                <div class="text-muted">
+                                    Auto schedule tasks
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                                id="use_collaborative_pad"
+                                class="col-12 col-lg-6 o_setting_box"
+                            >
+                            <div class="o_setting_left_pane">
+                                <field name="bryntum_user_assignment" />
+                            </div>
+                            <div
+                                    class="o_setting_right_pane"
+                                    name="pad_project_right_pane"
+                                >
+                                <label for="bryntum_user_assignment" />
+                                <div class="text-muted">
+                                    Use user table as resource base
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
