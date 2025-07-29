@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+<record id="res_config_settings_view_form" model="ir.ui.view">
+    <field name="name">res.config.settings.view.form.inherit.bryntum</field>
+    <field name="model">res.config.settings</field>
+    <field name="priority" eval="50" />
+    <field name="inherit_id" ref="base.res_config_settings_view_form" />
+    <field name="arch" type="xml">
+        <xpath expr="//form" position="inside">
+              <app
+                    data-string="Gantt View Pro"
+                    string="Gantt View Pro"
+                    name="bryntum_gantt_enterprise"
+                    groups="project.group_project_manager"
+                >
+                <block title="Gantt View Pro Management" name="Gantt_view">
+                <setting
+                            string="Auto Scheduling"
+                            title="Auto Scheduling"
+                            id="gantt_view_pro_management"
+                        >
+                        <div class="o_setting_left_pane">
+                            <field name="bryntum_auto_scheduling" />
+                        </div>
+                        <div class="o_setting_right_pane" name="pad_project_right_pane">
+                            <label for="bryntum_auto_scheduling" />
+                            <div class="text-muted">
+                                Auto schedule tasks
+                            </div>
+                        </div>
+                    </setting>
+                    <setting
+                            string="Enable User Settings"
+                            title="Enable User Settings"
+                            id="gantt_enable_user_settings"
+                        >
+                        <div class="o_setting_left_pane">
+                            <field name="bryntum_enable_user_config_edit" />
+                        </div>
+                        <div class="o_setting_right_pane" name="pad_project_right_pane">
+                            <label for="bryntum_enable_user_config_edit" />
+                            <div class="text-muted">
+                                Enable User Config Edit
+                            </div>
+                        </div>
+                    </setting>
+                    <setting
+                            id="user_assignment"
+                            string="User Assignment"
+                            title="User Assignment"
+                        >
+                        <div class="o_setting_left_pane">
+                            <field name="bryntum_user_assignment" />
+                        </div>
+                        <div class="o_setting_right_pane" name="pad_project_right_pane">
+                            <label for="bryntum_user_assignment" />
+                            <div class="text-muted">
+                                Use user table as resource base (default resources)
+                            </div>
+                        </div>
+                    </setting>
+
+                    <setting id="readonly_projects" string="Readonly Projects">
+                        <div class="o_setting_left_pane">
+                            <field name="bryntum_readonly_projects" />
+                        </div>
+                        <div class="o_setting_right_pane" name="pad_project_right_pane">
+                            <label for="bryntum_readonly_projects" />
+                            <div class="text-muted">
+                                Set the GanttView readonly
+                            </div>
+                        </div>
+                    </setting>
+
+                    <setting id="save_wbs" string="WBS">
+                        <div class="o_setting_left_pane">
+                            <field name="bryntum_save_wbs" />
+                        </div>
+                        <div class="o_setting_right_pane" name="pad_project_right_pane">
+                            <label for="bryntum_save_wbs" />
+                            <div class="text-muted">
+                                Save WBS values
+                            </div>
+                        </div>
+                    </setting>
+                    <setting
+                            id="replace_user_by_employee_in_view"
+                            string="Replace users with employees"
+                            title="Replace users with employees"
+                        >
+                        <div class="o_setting_left_pane">
+                            <field name="bryntum_replace_user_by_employee_in_views" />
+                        </div>
+                        <div class="o_setting_right_pane" name="pad_project_right_pane">
+                            <label for="bryntum_replace_user_by_employee_in_views" />
+                            <div class="text-muted">
+                                Replace user ids with employees in all views
+                            </div>
+                        </div>
+                    </setting>
+                    <setting id="copy_dependencies" string="Copy Dependencies">
+                        <div class="o_setting_left_pane">
+                            <field name="bryntum_copy_dependencies" />
+                        </div>
+                        <div class="o_setting_right_pane" name="pad_project_right_pane">
+                            <label for="bryntum_copy_dependencies" />
+                            <div class="text-muted">
+                                Copy Dependencies on copy/paste
+                            </div>
+                        </div>
+                    </setting>
+
+             </block>
+             <block
+                        title="Configuration and Calendar"
+                        name="Gantt_configuration_and_calendar"
+                    >
+                    <setting
+                            id="use_gantt_config"
+                            string="Gantt Configuration Object"
+                            help="A valid JSON configuration object for the gantt view"
+                        >
+                      <div class="content-group">
+                        <label for="bryntum_gantt_config" string="" />
+                        <field
+                                    height="250"
+                                    name="bryntum_gantt_config"
+                                    class="gantt_config"
+                                />
+                        </div>
+                    </setting>
+                    <setting
+                            id="use_calendar_config"
+                            string="Calendar Configuration Object"
+                            help="An optional valid JSON configuration for the project calendar"
+                        >
+                      <div class="content-group">
+                          <div class="mt16">
+                            <label for="bryntum_calendar_config" string=" " />
+                            <field
+                                        height="250"
+                                        name="bryntum_calendar_config"
+                                        class="gantt_config"
+                                    />
+                         </div>
+                      </div>
+                    </setting>
+                    <setting id="default_calendar" string="Default Calendar">
+                        <label for="bryntum_default_calendar" string="" />
+                        <field width="250" name="bryntum_default_calendar" />
+                     </setting>
+             </block>
+            </app>
+
+        </xpath>
+    </field>
+</record>
+
+</odoo>

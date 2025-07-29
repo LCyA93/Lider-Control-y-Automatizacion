@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Stages -->
+        <record id="bryntum_stage_0" model="project.task.type">
+            <field name="sequence">1</field>
+            <field name="name">To Do</field>
+<!--            <field name="legend_blocked">Not validated</field>-->
+            <field
+                name="mail_template_id"
+                ref="project.mail_template_data_project_task"
+            />
+        </record>
+        <record id="bryntum_stage_1" model="project.task.type">
+            <field name="sequence">10</field>
+            <field name="name">In Progress</field>
+<!--            <field name="legend_blocked">Need functional or technical help</field>-->
+<!--            <field name="legend_done">Buzz or set as done</field>-->
+        </record>
+        <record id="bryntum_stage_2" model="project.task.type">
+            <field name="sequence">20</field>
+            <field name="name">Done</field>
+            <field name="fold" eval="True" />
+        </record>
+        <record id="bryntum_stage_3" model="project.task.type">
+            <field name="sequence">30</field>
+            <field name="name">Testing</field>
+<!--            <field name="legend_done">Ready to reopen</field>-->
+        </record>
+        <record id="bryntum_stage_4" model="project.task.type">
+            <field name="sequence">40</field>
+            <field name="name">Backlog</field>
+<!--            <field name="legend_done">Ready to reopen</field>-->
+        </record>
+
+        <!--        Project -->
+
+        <record id="bryntum_project_1" model="project.project">
+            <field
+                name="project_start_date"
+                eval="time.strftime('%Y-%m-01 10:00:00')"
+            />
+            <field name="name">Launch SaaS Product (Bryntum Gantt Pro)</field>
+            <field name="color">3</field>
+            <field name="user_id" ref="base.user_demo" />
+            <field name="privacy_visibility">portal</field>
+        </record>
+
+        <!--        Tasks -->
+
+        <record id="bryntum_task_1" model="project.task">
+            <field name="percent_done">50</field>
+            <field name="name">Setup web server</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=60)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=57)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">1</field>
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_4" />
+        </record>
+
+        <record id="bryntum_task_11" model="project.task">
+            <field name="percent_done">50</field>
+            <field name="name">Install Apache</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=60)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=57)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">1</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_1" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_1" />
+        </record>
+
+        <record id="bryntum_task_12" model="project.task">
+            <field name="percent_done">50</field>
+            <field name="name">Configure firewall</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=60)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=57)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">2</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_1" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_1" />
+        </record>
+
+        <record id="bryntum_task_13" model="project.task">
+            <field name="percent_done">50</field>
+            <field name="name">Setup load balancer</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=60)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=57)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">3</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_1" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_1" />
+        </record>
+
+        <record id="bryntum_task_14" model="project.task">
+            <field name="percent_done">50</field>
+            <field name="name">Configure ports</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=60)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=58)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">4</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_1" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_1" />
+        </record>
+
+        <record id="bryntum_task_15" model="project.task">
+            <field name="percent_done">0</field>
+            <field name="name">Run tests</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=53)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=51)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">5</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_1" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+        <record id="bryntum_task_2" model="project.task">
+            <field name="name">Website Design</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=51)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=31)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">2</field>
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_4" />
+        </record>
+
+        <record id="bryntum_task_21" model="project.task">
+            <field name="percent_done">70</field>
+            <field name="name">Contact designers</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=51)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=44)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">1</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_2" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_1" />
+        </record>
+
+        <record id="bryntum_task_22" model="project.task">
+            <field name="percent_done">60</field>
+            <field name="name">Create shortlist of three designers</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=44)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=43)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">2</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_2" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_1" />
+        </record>
+
+        <record id="bryntum_task_23" model="project.task">
+            <field name="percent_done">50</field>
+            <field name="name">Select and review final design</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=43)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=41)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">3</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_2" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_1" />
+        </record>
+
+        <record id="bryntum_task_24" model="project.task">
+            <field name="percent_done">100</field>
+            <field name="name">Inform management about decision</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=38)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">4</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_2" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_2" />
+        </record>
+
+        <record id="bryntum_task_25" model="project.task">
+            <field name="percent_done">0</field>
+            <field name="name">Apply design to web site</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=38)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=29)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">5</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_2" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+        <record id="bryntum_task_3" model="project.task">
+            <field name="percent_done">20</field>
+            <field name="name">Setup Test Strategy</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=44)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=30)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">3</field>
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_3" />
+        </record>
+
+        <record id="bryntum_task_31" model="project.task">
+            <field name="percent_done">40</field>
+            <field name="name">Hire QA staff</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=60)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=56)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">1</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_3" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_1" />
+        </record>
+
+        <record id="bryntum_task_33" model="project.task">
+            <field name="percent_done">9</field>
+            <field name="name">Write test specs</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=44)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=37)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">2</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_3" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_3" />
+        </record>
+       <!-- these tasks cannot be sub tasks of a subtask. odoo does
+       not allow multi level subtasks -->
+        <record id="bryntum_task_331" model="project.task">
+            <field name="percent_done">20</field>
+            <field name="name">Unit tests</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=44)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=37)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">1</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_3" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_3" />
+        </record>
+
+        <record id="bryntum_task_332" model="project.task">
+            <field name="percent_done">10</field>
+            <field name="name">UI unit tests / individual screens</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=44)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=39)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">2</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_3" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_3" />
+        </record>
+
+        <record id="bryntum_task_333" model="project.task">
+            <field name="percent_done">0</field>
+            <field name="name">Application tests</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=44)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=37)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">3</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_3" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+        <record id="bryntum_task_334" model="project.task">
+            <field name="percent_done">0</field>
+            <field name="name">Monkey tests</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=44)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=43)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">4</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_3" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+
+        <record id="bryntum_task_4" model="project.task">
+            <field name="percent_done">60</field>
+            <field name="name">Application Implementation</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=38)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=2)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">4</field>
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_4" />
+        </record>
+
+        <record id="bryntum_task_400" model="project.task">
+            <field name="name">Phase #1</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=38)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=33)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">1</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_4" />
+        </record>
+
+        <!--again flattening level 2 of subtasks to be all children of _4-->
+        <record id="bryntum_task_41" model="project.task">
+            <field name="name">Authentication module</field>
+            <field name="percent_done">100</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=38)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=33)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">1</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_2" />
+        </record>
+
+        <record id="bryntum_task_42" model="project.task">
+            <field name="name">Single sign on</field>
+            <field name="percent_done">100</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=38)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=35)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">2</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_2" />
+        </record>
+
+        <record id="bryntum_task_43" model="project.task">
+            <field name="name">Implement role based access</field>
+            <field name="percent_done">0</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=38)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=36)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">3</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+        <record id="bryntum_task_44" model="project.task">
+            <field name="name">Basic test coverage</field>
+            <field name="percent_done">0</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=38)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=35)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">4</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+        <record id="bryntum_task_45" model="project.task">
+            <field name="name">Very high coverage</field>
+            <field name="percent_done">0</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=31)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=29)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">5</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+        <record id="bryntum_task_46" model="project.task">
+            <field name="name">Make backup</field>
+            <field name="percent_done">0</field>
+            <field name="duration">0</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=29)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=29)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">6</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+
+        <record id="bryntum_task_401" model="project.task">
+            <field name="name">Phase #2</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=31)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=30)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">2</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_4" />
+        </record>
+
+        <!-- flattening again level 2 of subtasks to level 1-->
+        <record id="bryntum_task_4011" model="project.task">
+            <field name="name">Authentication module</field>
+            <field name="percent_done">70</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=31)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=16)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">1</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_1" />
+        </record>
+
+        <record id="bryntum_task_4012" model="project.task">
+            <field name="name">Single sign on</field>
+            <field name="percent_done">60</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=31)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=6)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">2</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_1" />
+        </record>
+
+        <record id="bryntum_task_4013" model="project.task">
+            <field name="name">Implement role based access</field>
+            <field name="percent_done">50</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=31)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=10)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">3</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_1" />
+        </record>
+
+        <record id="bryntum_task_4014" model="project.task">
+            <field name="name">Basic test coverage</field>
+            <field name="percent_done">0</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=31)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=13)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">4</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+        <record id="bryntum_task_4015" model="project.task">
+            <field name="name">Verify high test coverage</field>
+            <field name="percent_done">0</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=34)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=30)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">5</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+        <record id="bryntum_task_402" model="project.task">
+            <field name="name">Acceptance phase</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=5)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=1)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">3</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_4" />
+        </record>
+
+        <!-- flattening again level 2 of subtasks to level 1-->
+        <record id="bryntum_task_4031" model="project.task">
+            <field name="name">Company bug bash</field>
+            <field name="percent_done">70</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=5)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=1)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">1</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_3" />
+        </record>
+
+        <record id="bryntum_task_4032" model="project.task">
+            <field name="name">Test all webpages</field>
+            <field name="percent_done">60</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=6)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=1)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">2</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_3" />
+        </record>
+
+        <record id="bryntum_task_4033" model="project.task">
+            <field name="name">Verify no broken links</field>
+            <field name="percent_done">50</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=4)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=1)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">3</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_4" />
+        </record>
+
+        <record id="bryntum_task_4034" model="project.task">
+            <field name="name">Make test release</field>
+            <field name="percent_done">0</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=5)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=1)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">4</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+        <record id="bryntum_task_4035" model="project.task">
+            <field name="name">Send invitation mail</field>
+            <field name="percent_done">0</field>
+            <field name="duration">0</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=1)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">5</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+        <record id="bryntum_task_4036" model="project.task">
+            <field name="name">Celebrate launch</field>
+            <field name="percent_done">0</field>
+            <field
+                name="planned_date_begin"
+                eval="(datetime.now() - relativedelta(days=5)).strftime('%Y-%m-%d')"
+            />
+            <field
+                name="date_deadline"
+                eval="(datetime.now() - relativedelta(days=1)).strftime('%Y-%m-%d')"
+            />
+            <field name="parent_index">6</field>
+            <field name="parent_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+            <field name="project_id" ref="bryntum_gantt_enterprise.bryntum_project_1" />
+            <field name="stage_id" ref="bryntum_gantt_enterprise.bryntum_stage_0" />
+        </record>
+
+        <!--        deps-->
+
+        <record id="bryntum_dep_1" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_11" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_15" />
+            <field name="lag">2</field>
+        </record>
+
+        <record id="bryntum_dep_2" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_12" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_15" />
+        </record>
+
+        <record id="bryntum_dep_3" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_13" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_15" />
+        </record>
+
+        <record id="bryntum_dep_4" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_14" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_15" />
+        </record>
+
+        <record id="bryntum_dep_5" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_15" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_21" />
+        </record>
+
+        <record id="bryntum_dep_7" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_21" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_22" />
+        </record>
+
+        <record id="bryntum_dep_8" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_22" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_23" />
+        </record>
+
+        <record id="bryntum_dep_9" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_23" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_24" />
+        </record>
+
+        <record id="bryntum_dep_10" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_24" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_25" />
+        </record>
+
+        <record id="bryntum_dep_11" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_31" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_331" />
+        </record>
+
+        <record id="bryntum_dep_111" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_31" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_332" />
+        </record>
+
+        <record id="bryntum_dep_112" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_31" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_333" />
+        </record>
+
+        <record id="bryntum_dep_113" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_31" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_334" />
+        </record>
+
+        <record id="bryntum_dep_12" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_400" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_401" />
+        </record>
+
+        <record id="bryntum_dep_13" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_401" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_402" />
+        </record>
+
+        <record id="bryntum_dep_15" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_3" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_4" />
+        </record>
+
+        <record id="bryntum_dep_16" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_41" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_45" />
+        </record>
+
+        <record id="bryntum_dep_17" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_42" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_45" />
+        </record>
+
+        <record id="bryntum_dep_18" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_43" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_45" />
+        </record>
+
+        <record id="bryntum_dep_19" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_44" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_45" />
+        </record>
+
+        <record id="bryntum_dep_20" model="project.task.linked">
+            <field name="from_id" ref="bryntum_gantt_enterprise.bryntum_task_4034" />
+            <field name="to_id" ref="bryntum_gantt_enterprise.bryntum_task_4035" />
+        </record>
+        <record id="base.user_demo" model="res.users">
+            <field
+                name="groups_id"
+                eval="[(4, ref('project.group_project_manager'))]"
+            />
+        </record>
+
+    </data>
+</odoo>
