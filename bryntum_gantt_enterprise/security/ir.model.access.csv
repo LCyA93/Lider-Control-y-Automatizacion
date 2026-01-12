@@ -1,6 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_project_task_linked,project.task.linked,model_project_task_linked,,1,1,1,1
-access_project_task_assignment,project.task.assignment,model_project_task_assignment,,1,1,1,1
-access_project_task_baseline,project.task.baseline,model_project_task_baseline,,1,1,1,1
-access_project_task_segment,project.task.segment,model_project_task_segment,,1,1,1,1
-access_bryntum_gantt_user_config,bryntum.gantt.user.config,model_bryntum_gantt_user_config,,1,1,1,1
