@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="stock_3d_custom_view.ListView.Buttons" t-inherit="web.ListView.Buttons" t-inherit-mode="primary" owl="1">
+        <xpath expr="." position="inside">
+            <button class="btn btn-primary" t-on-click="(ev) => this.open3DView(ev)">Preview Layout</button>
+        </xpath>
+    </t>
+</templates>
