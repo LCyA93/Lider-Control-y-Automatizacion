@@ -1,0 +1,249 @@
+<!-- ========================================================= -->
+<!-- ODOO APP UPDATE REFERENCE -->
+<!-- Universal append-only reference for all Softhealer apps -->
+<!-- ========================================================= -->
+
+
+
+<!-- ========================================================= -->
+<!-- 1) FEATURE BLOCK REFERENCE -->
+<!-- Append ONLY new feature div block(s) inside existing feature section -->
+<!-- Do NOT create wrapper section/row -->
+<!-- ========================================================= -->
+
+<!-- NORMAL FEATURE CARD -->
+
+<div class="img_dec shadow mt-4" style="padding:20px; display:inline-flex; border-radius:10px">
+                <img src="icons/1.png" alt="" style="width:70px; height:75px">
+                <div class="dec" style="padding-left:20px">
+                  <h5 style="color:#1e266d; font-family:&quot;Montserrat&quot; sans-serif">
+                    <b>FEATURE TITLE</b>
+                  </h5>
+                  <p style="color:#666; font-size:16px; font-family:&quot;Roboto&quot; sans-serif">
+                    Feature description here.
+                  </p>
+                </div>
+              </div>
+
+
+<!-- SINGLE CENTER PENDING FEATURE CARD -->
+ <div class="col-lg-3"></div>
+   <div class="col-lg-6">
+   <div class="img_dec shadow mt-4" style="padding:20px; display:inline-flex; border-radius:10px">
+                <img src="icons/1.png" alt="" style="width:70px; height:75px">
+                <div class="dec" style="padding-left:20px">
+                  <h5 style="color:#1e266d; font-family:&quot;Montserrat&quot; sans-serif">
+                    <b>FEATURE TITLE</b>
+                  </h5>
+                  <p style="color:#666; font-size:16px; font-family:&quot;Roboto&quot; sans-serif">
+                    Feature description here.
+                  </p>
+                </div>
+              </div>
+           </div>
+ <div class="col-lg-3"></div>
+
+<!-- FEATURE RULE:
+Normal structure = 2 cards row.
+
+If last feature is single centered pending:
+→ previous centered becomes LEFT normal card
+→ new feature becomes RIGHT normal card
+
+If last row already has 2 cards:
+→ append new centered single pending card
+
+Only modify last pending card.
+Never reorder older cards.
+Append at end only.
+-->
+
+
+
+<!-- ========================================================= -->
+<!-- 2) RELEASE BLOCK REFERENCE -->
+<!-- Append ONLY new release div block inside existing release section -->
+<!-- Latest release should appear first -->
+<!-- ========================================================= -->
+<div class="sh_content shadow rounded bg-white" style="padding:20px; margin-bottom:15px">
+            <h4 style="font-size:16px; margin:0; color:#212121; text-decoration:none; font-weight:600; letter-spacing:1px; display:block">
+              <span class="fa fa-hand-o-right" style="color:#1e266d; font-weight:600; font-size:18px; padding-right:10px"></span>
+              <span>Version X.X.X.X.X</span>
+              |
+              <span style="color:#1e266d">
+                Released on : DAY<sup>suffix</sup> Month Year
+              </span>
+            </h4>
+            <div style="font-size:16px; padding-left:32px; color:#555; margin:0; padding-top:15px">
+              <div style="font-weight:normal" class="d-flex align-items-center">
+                <span class="bg-success me-2" style="background-color:#43a047 !important; padding:5px 17px; border-radius:3px; color:#fff !important; font-size:9px; text-transform:uppercase; font-weight:bold">
+                  New
+                </span>
+                <span style="vertical-align:middle; font-size:15px">Added FEATURE NAME Feature.</span>
+              </div>
+            </div>
+          </div>
+
+
+   <!-- ONE FEATURE = ONE NEW ROW -->
+    <div style="font-size:16px; padding-left:32px; color:#555; margin:0; padding-top:15px">
+              <div style="font-weight:normal" class="d-flex align-items-center">
+                <span class="bg-success me-2" style="background-color:#43a047 !important; padding:5px 17px; border-radius:3px; color:#fff !important; font-size:9px; text-transform:uppercase; font-weight:bold">
+                  New
+                </span>
+                <span style="vertical-align:middle; font-size:15px">Added FEATURE NAME Feature.</span>
+              </div>
+            </div>
+
+<!-- RELEASE RULE:
+Each changelog feature = separate NEW row
+
+1 feature = 1 row
+4 features = 4 rows
+7 features = 7 rows
+
+Never merge features.
+
+Date format:
+22<sup>nd</sup> April 2026
+-->
+
+
+<!-- ========================================================= -->
+<!-- 3) SETUP TAB LI REFERENCE -->
+<!-- Append at END of existing <ul> -->
+<!-- ========================================================= -->
+
+<li class="nav-item position-relative"
+   style="color:black;
+          border-radius:2px;
+          width:100%;
+          text-align:center;
+          margin-bottom:7px;
+          font-weight:600;
+          font-size:14px;
+          background-color:#dee2e6"
+   role="presentation">
+
+   <a class="nav-link rounded"
+      data-bs-toggle="tab"
+      href="#feature_slug"
+      style="border:1px solid #dee2e6;
+             padding:10px 20px;
+             border-top-left-radius:0px;
+             border-top-right-radius:0px;
+             color:black;
+             border-radius:0px !important"
+      role="tab">
+
+      FEATURE NAME
+
+      <img class="position-absolute fixed-top"
+         src="new2.png"
+         alt="new_tag_ribbon"
+         style="height:35px">
+
+   </a>
+
+</li>
+
+<!--
+SLUG RULE:
+
+Portal Tracking → portal_tracking
+Mass Label Printing → mass_label_printing
+AI Popup Window → ai_popup_window
+
+href="#portal_tracking"
+-->
+
+
+
+<!-- ========================================================= -->
+<!-- 4) SETUP TAB CONTENT REFERENCE -->
+<!-- Append at END of existing tab-content -->
+<!-- id must match LI href slug -->
+<!-- ========================================================= -->
+
+<div class="tab-pane fade"
+   id="feature_slug"
+   role="tabpanel"
+   aria-labelledby="feature_slug-tab">
+
+   <p style="color:#1b325f;
+      font-size:20px;
+      max-width:75%;
+      margin:auto;
+      margin-bottom:20px;
+      letter-spacing:0.5px">
+
+      Screenshot descriptive content.
+
+   </p>
+
+   <div class="col-md-12">
+      <img class="img-responsive rounded shadow"
+         src="IMAGE_PATH"
+         style="width:100%"
+         alt="feature_screenshot">
+   </div>
+
+   <br>
+
+
+   <p style="color:#1b325f;
+      font-size:20px;
+      max-width:75%;
+      margin:auto;
+      margin-bottom:20px;
+      letter-spacing:0.5px">
+
+      Screenshot descriptive content.
+
+   </p>
+
+   <div class="col-md-12">
+      <img class="img-responsive rounded shadow"
+         src="IMAGE_PATH"
+         style="width:100%"
+         alt="feature_screenshot">
+   </div>
+
+   <br>
+
+
+   <!-- OPTIONAL VIDEO BLOCK -->
+   <!-- insert only if available -->
+
+</div>
+
+
+<!--
+TAB CONTENT RULE:
+
+Append new DIV at END only
+
+LI href="#feature_slug"
+DIV id="feature_slug"
+
+must match exactly
+
+1 feature = 1 LI + 1 DIV
+4 features = 4 LI + 4 DIV
+
+Structure:
+
+Caption
+Screenshot
+<br>
+
+Caption
+Screenshot
+<br>
+
+Caption
+Screenshot
+<br>
+
+(optional video)
+-->

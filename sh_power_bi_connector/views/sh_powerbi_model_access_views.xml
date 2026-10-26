@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+
+    <!-- List View -->
+    <record id="sh_powerbi_model_access_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.model.access.view.list</field>
+        <field name="model">sh.powerbi.model.access</field>
+        <field name="arch" type="xml">
+            <list string="Power BI Model Access">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="model_name" optional="show"/>
+                <field name="display_alias"/>
+                <field name="target_mode"/>
+                <field name="fabric_config_id" optional="hide"/>
+                <field name="fabric_item_id" optional="hide"/>
+                <field name="fabric_sync_state" optional="hide"/>
+                <field name="domain_filter"/>
+                <field name="allowed_field_ids" widget="many2many_tags" optional="show"/>
+                <field name="powerbi_selected_field_count" optional="show"/>
+                <field name="powerbi_table_count" optional="show"/>
+                <field name="enable_delta" widget="boolean_toggle" optional="show"/>
+                <field name="enable_realtime" widget="boolean_toggle" optional="show"/>
+                <field name="odoo_record_count" string="Records" optional="show"/>
+                <field name="last_push_date" optional="show"/>
+                <field name="last_push_count" optional="show"/>
+                <field name="last_push_write_date" optional="hide"/>
+                <field name="last_fabric_sync_date" optional="hide"/>
+                <field name="is_active" widget="boolean_toggle"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <button name="action_preview_data" type="object" icon="fa-eye" title="Preview Data" class="btn-sm btn-secondary"/>
+                <button name="action_export_csv" type="object" icon="fa-download" title="Export CSV" class="btn-sm btn-secondary"/>
+                <button name="action_validate_data_quality" type="object" icon="fa-check-square-o" title="Validate" class="btn-sm btn-secondary"/>
+                <button name="action_run_target_sync" type="object" icon="fa-play" title="Run Target Sync" class="btn-sm btn-primary"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="sh_powerbi_model_access_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.model.access.view.form</field>
+        <field name="model">sh.powerbi.model.access</field>
+        <field name="arch" type="xml">
+            <form string="Power BI Model Access">
+                <header>
+                    <button name="action_run_target_sync" string="Run Target Sync" type="object"
+                            class="btn-primary" icon="fa-play"/>
+                    <button name="action_validate_data_quality" string="Validate Data" type="object"
+                            class="btn-secondary" icon="fa-check-square-o"/>
+                    <button name="action_export_csv" string="Export CSV" type="object"
+                            class="btn-secondary" icon="fa-download"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_preview_data" type="object"
+                                class="oe_stat_button" icon="fa-eye">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="odoo_record_count"/></span>
+                                <span class="o_stat_text">Records</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Sales Orders"/></h1>
+                    </div>
+                    <group>
+                        <group string="Model Configuration">
+                            <field name="model_id" options="{'no_create': True}"/>
+                            <field name="model_name" readonly="1"/>
+                            <field name="display_alias" placeholder="Leave blank to use model description"/>
+                            <field name="target_mode"/>
+                            <field name="domain_filter" placeholder="e.g. [('state','=','sale')]"/>
+                            <field name="sequence"/>
+                            <field name="is_active"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Push Status">
+                            <field name="powerbi_dataset_id" readonly="1"/>
+                            <field name="powerbi_selected_field_count" readonly="1"/>
+                            <field name="powerbi_table_count" readonly="1"/>
+                            <field name="last_push_date" readonly="1"/>
+                            <field name="last_push_count" readonly="1"/>
+                            <field name="last_push_write_date" readonly="1"/>
+                            <field name="fabric_sync_state" readonly="1"/>
+                            <field name="last_fabric_sync_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Fabric Target" invisible="target_mode == 'powerbi_push'">
+                        <group>
+                            <field name="fabric_config_id"/>
+                            <field name="fabric_item_id"
+                                   domain="[('fabric_config_id','=',fabric_config_id)]"/>
+                            <field name="fabric_target_name" placeholder="Defaults to display alias or model name"/>
+                        </group>
+                        <group>
+                            <field name="fabric_last_message" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Sync Options">
+                        <group string="Incremental Push">
+                            <field name="enable_delta"/>
+                            <div class="alert alert-info" role="alert"
+                                 invisible="not enable_delta">
+                                <i class="fa fa-info-circle me-2" title="Info"/>
+                                <strong>Incremental mode:</strong> only records with
+                                <code>write_date &gt; Last Synced Write Date</code> are pushed.
+                                Rows are <strong>appended</strong> — existing rows are not deleted.
+                                Disable to run a full clear + re-push.
+                            </div>
+                        </group>
+                        <group string="Real-Time Push">
+                            <field name="enable_realtime"/>
+                            <div class="alert alert-warning" role="alert"
+                                 invisible="not enable_realtime">
+                                <i class="fa fa-bolt me-2" title="Real-time"/>
+                                <strong>Real-time mode:</strong> every record save on this model
+                                immediately queues a push job. Deduplicated — only one pending
+                                job is queued at a time. Requires an authorized Push Configuration.
+                            </div>
+                        </group>
+                    </group>
+                    <group string="Allowed Fields">
+                        <field name="allowed_field_ids"  colspan="2"
+                               widget="many2many_tags"
+                               options="{'no_create': True}"
+                               domain="[('model_id','=',model_id),('store','=',True),('ttype','not in',['binary','html','json','properties','properties_definition'])]"/>
+                        <div class="alert alert-info" colspan="2" role="alert">
+                            <i class="fa fa-info-circle me-2" title="Info"/>
+                            Leave blank to expose <strong>all stored non-binary fields</strong>.
+                            Select specific fields to limit what Power BI can read.
+                            <br/>
+                            <i class="fa fa-exclamation-triangle text-warning me-2" title="Warning"/>
+                            <strong>NOTE:</strong> Microsoft Power BI push datasets restrict a single table to a
+                            <strong>maximum of 75 columns</strong>. If more fields are selected, Odoo automatically
+                            splits them into multiple Power BI tables using the shared <code>id</code> column.
+                        </div>
+                        
+                    </group>
+                    <notebook>
+                        <page string="Sync Checkpoints">
+                            <field name="checkpoint_ids" readonly="1">
+                                <list>
+                                    <field name="target"/>
+                                    <field name="state"/>
+                                    <field name="last_success_at"/>
+                                    <field name="last_write_date"/>
+                                    <field name="last_record_count"/>
+                                    <field name="message"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_sh_powerbi_model_access" model="ir.actions.act_window">
+        <field name="name">Power BI Model Access</field>
+        <field name="res_model">sh.powerbi.model.access</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+
+    <!-- ── List View ──────────────────────────────────────────────────────── -->
+    <record id="sh_powerbi_embedded_report_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.embedded.report.list</field>
+        <field name="model">sh.powerbi.embedded.report</field>
+        <field name="arch" type="xml">
+            <list string="Embedded Reports"
+                  decoration-success="report_status == 'live'"
+                  decoration-warning="report_status == 'expired'"
+                  decoration-muted="report_status == 'inactive'">
+                <field name="name"/>
+                <field name="push_config_id"/>
+                <field name="report_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="report_status" widget="badge"
+                       decoration-success="report_status == 'live'"
+                       decoration-warning="report_status in ('expired', 'no_token')"
+                       decoration-danger="report_status == 'inactive'"/>
+                <field name="last_sync_date" string="Last Data Refresh"/>
+                <field name="token_expiry"/>
+                <field name="is_active" widget="boolean_toggle"/>
+                <button name="action_generate_embed_token" type="object"
+                        icon="fa-refresh" title="Generate / Refresh Token"/>
+                <button name="action_view_report" type="object"
+                        icon="fa-eye" title="View Embedded Report"
+                        invisible="report_status not in ('live',)"/>
+                <button name="action_open_in_powerbi" type="object"
+                        icon="fa-external-link" title="Open in Power BI"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ── Form View ──────────────────────────────────────────────────────── -->
+    <record id="sh_powerbi_embedded_report_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.embedded.report.form</field>
+        <field name="model">sh.powerbi.embedded.report</field>
+        <field name="arch" type="xml">
+            <form string="Embedded Report">
+                <header>
+                    <button name="action_generate_embed_token" type="object"
+                            string="Generate Token" class="btn-primary"/>
+                    <button name="action_view_report" type="object"
+                            string="View Report" class="btn-primary"
+                            invisible="report_status not in ('live',)"/>
+                    <button name="action_open_in_powerbi" type="object"
+                            string="Open in Power BI"/>
+                </header>
+                <sheet>
+                    <!-- Status Banner -->
+                    <div class="alert alert-success mb-3" role="alert"
+                         invisible="report_status != 'live'">
+                        <span class="fw-bold">
+                            <i class="fa fa-circle me-1" title="Live"/>
+                            Report Status: Live &amp; Syncing
+                        </span>
+                        <span class="ms-3 text-muted" invisible="not last_sync_date">
+                            Last Data Refresh: <field name="last_sync_date" readonly="1" nolabel="1"/>
+                        </span>
+                    </div>
+                    <div class="alert alert-warning mb-3" role="alert"
+                         invisible="report_status not in ('expired', 'no_token')">
+                        <i class="fa fa-exclamation-triangle me-1" title="Warning"/>
+                        <strong>Token Expired or Missing</strong> — Click <strong>Generate Token</strong> to refresh.
+                    </div>
+                    <div class="alert alert-danger mb-3" role="alert"
+                         invisible="report_status != 'inactive'">
+                        <i class="fa fa-ban me-1" title="Inactive"/>
+                        <strong>Report is Inactive.</strong> Enable the <em>Active</em> toggle to use this report.
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Sales Overview"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Basic Information">
+                            <field name="push_config_id"/>
+                            <field name="report_id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"/>
+                            <field name="workspace_id" placeholder="Leave blank to use Push Config workspace"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="is_active"/>
+                            <field name="allow_embedding"/>
+                        </group>
+                        <group string="Embedding Status">
+                            <field name="report_status" widget="badge"
+                                   decoration-success="report_status == 'live'"
+                                   decoration-warning="report_status in ('expired', 'no_token')"
+                                   decoration-danger="report_status == 'inactive'"/>
+                            <field name="last_sync_date" string="Last Data Refresh" readonly="1"/>
+                            <field name="token_expiry" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Embed Details" invisible="not embed_url">
+                        <field name="embed_url" readonly="1" widget="url"/>
+                        <field name="web_url" readonly="1" widget="url" string="Power BI Web URL"/>
+                    </group>
+
+                    <!-- Embedded Report Preview Link -->
+                    <div class="mt-3" invisible="report_status != 'live'">
+                        <div class="alert alert-info" role="alert">
+                            <i class="fa fa-info-circle me-2" title="Info"/>
+                            Click <strong>View Report</strong> above to open the Power BI report
+                            as a full interactive embedded view powered by the Power BI JavaScript SDK.
+                        </div>
+                    </div>
+
+                    <!-- Setup Instructions -->
+                    <div class="alert alert-info mt-3" role="alert"
+                         invisible="report_status not in ('no_token', 'inactive')">
+                        <h5 class="alert-heading" role="status">
+                            <i class="fa fa-book me-2" title="Guide"/> How to Set Up Embedded Reports
+                        </h5>
+                        <hr class="my-2"/>
+                        <ol class="mb-0 small">
+                            <li>Set the <strong>Push Configuration</strong> (must be Authorized).</li>
+                            <li>Enter the <strong>Power BI Report ID</strong> — found in the report URL:
+                                <code>app.powerbi.com/groups/{'{'}workspace_id{'}'}/reports/<strong>{'{'}report-id{'}'}</strong></code>
+                            </li>
+                            <li>Optionally set <strong>Workspace ID</strong> (defaults to Push Config workspace).</li>
+                            <li>Click <strong>Generate Token</strong> to fetch the embed token from Power BI.</li>
+                            <li>Click <strong>View Report</strong> to open the embedded report inside Odoo.</li>
+                        </ol>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Action ─────────────────────────────────────────────────────────── -->
+    <record id="action_sh_powerbi_embedded_report" model="ir.actions.act_window">
+        <field name="name">Embedded Reports</field>
+        <field name="res_model">sh.powerbi.embedded.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

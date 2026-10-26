@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+
+    <record id="sh_powerbi_fabric_config_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.fabric.config.list</field>
+        <field name="model">sh.powerbi.fabric.config</field>
+        <field name="arch" type="xml">
+            <list string="Fabric Configurations">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state" widget="badge" decoration-success="state == 'authorized'" decoration-danger="state == 'error'" decoration-warning="state == 'draft'"/>
+                <field name="workspace_name"/>
+                <field name="workspace_id"/>
+                <field name="default_target_type"/>
+                <field name="last_discovery_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_fabric_config_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.fabric.config.form</field>
+        <field name="model">sh.powerbi.fabric.config</field>
+        <field name="arch" type="xml">
+            <form string="Fabric Configuration">
+                <header>
+                    <button name="action_authorize" type="object" string="Authorize" class="btn-primary" invisible="state == 'authorized'"/>
+                    <button name="action_authorize" type="object" string="Re-Authorize" class="btn-secondary" invisible="state != 'authorized'"/>
+                    <button name="action_test_connection" type="object" string="Test Connection" invisible="state != 'authorized'"/>
+                    <button name="action_discover_items" type="object" string="Discover Items" class="btn-secondary" invisible="state != 'authorized'"/>
+                    <button name="action_create_fabric_item" type="object" string="Create Item" invisible="state != 'authorized'"/>
+                    <button name="action_run_pipeline" type="object" string="Run Default Pipeline" class="btn-secondary" invisible="state != 'authorized'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,authorized,error"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_lakehouses" type="object" class="oe_stat_button" icon="fa-database">
+                            <field name="count_lakehouses" widget="statinfo" string="Lakehouses"/>
+                        </button>
+                        <button name="action_view_warehouses" type="object" class="oe_stat_button" icon="fa-server">
+                            <field name="count_warehouses" widget="statinfo" string="Warehouses"/>
+                        </button>
+                        <button name="action_view_eventhouses" type="object" class="oe_stat_button" icon="fa-bolt">
+                            <field name="count_eventhouses" widget="statinfo" string="Eventhouses"/>
+                        </button>
+                        <button name="action_view_kql_databases" type="object" class="oe_stat_button" icon="fa-search">
+                            <field name="count_kql_databases" widget="statinfo" string="KQL DBs"/>
+                        </button>
+                        <button name="action_view_pipelines" type="object" class="oe_stat_button" icon="fa-code-fork">
+                            <field name="count_pipelines" widget="statinfo" string="Pipelines"/>
+                        </button>
+                        <button name="action_view_pipeline_runs" type="object" class="oe_stat_button" icon="fa-play-circle">
+                            <field name="count_pipeline_runs" widget="statinfo" string="Runs"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Fabric Analytics Workspace"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Microsoft Entra Credentials">
+                            <field name="azure_tenant_id"/>
+                            <field name="azure_client_id"/>
+                            <field name="azure_client_secret" password="True"/>
+                            <field name="fabric_token_expiry" readonly="1"/>
+                        </group>
+                        <group string="Fabric Target">
+                            <field name="workspace_id"/>
+                            <field name="workspace_name" readonly="1"/>
+                            <field name="capacity_id"/>
+                            <field name="default_target_type"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lakehouses" name="lakehouses">
+                            <field name="lakehouse_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="external_id"/>
+                                    <field name="is_default_target"/>
+                                    <field name="last_run_state" widget="badge" decoration-success="last_run_state in ('success', 'done')" decoration-danger="last_run_state in ('failed', 'error')" decoration-info="last_run_state == 'running'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Warehouses" name="warehouses">
+                            <field name="warehouse_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="external_id"/>
+                                    <field name="is_default_target"/>
+                                    <field name="last_run_state" widget="badge" decoration-success="last_run_state in ('success', 'done')" decoration-danger="last_run_state in ('failed', 'error')" decoration-info="last_run_state == 'running'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Eventhouses" name="eventhouses">
+                            <field name="eventhouse_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="external_id"/>
+                                    <field name="is_default_target"/>
+                                    <field name="last_run_state" widget="badge" decoration-success="last_run_state in ('success', 'done')" decoration-danger="last_run_state in ('failed', 'error')" decoration-info="last_run_state == 'running'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="KQL DBs" name="kql_databases">
+                            <field name="kql_database_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="external_id"/>
+                                    <field name="is_default_target"/>
+                                    <field name="last_run_state" widget="badge" decoration-success="last_run_state in ('success', 'done')" decoration-danger="last_run_state in ('failed', 'error')" decoration-info="last_run_state == 'running'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Pipelines" name="pipelines">
+                            <field name="pipeline_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="external_id"/>
+                                    <field name="is_default_target"/>
+                                    <field name="last_run_state" widget="badge" decoration-success="last_run_state in ('success', 'done')" decoration-danger="last_run_state in ('failed', 'error')" decoration-info="last_run_state == 'running'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Pipeline Runs" name="runs">
+                            <field name="pipeline_run_ids" readonly="1">
+                                <list decoration-success="state == 'done'" decoration-danger="state == 'failed'" decoration-info="state == 'running'">
+                                    <field name="started_at"/>
+                                    <field name="name"/>
+                                    <field name="fabric_item_id"/>
+                                    <field name="model_access_id"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="record_count"/>
+                                    <field name="duration_seconds"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="All Items" name="all_items">
+                            <field name="item_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="item_type"/>
+                                    <field name="workspace_id"/>
+                                    <field name="external_id"/>
+                                    <field name="is_default_target"/>
+                                    <field name="last_run_state" widget="badge"/>
+                                    <field name="last_run_date"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    
+                    <div class="alert alert-info mt-3" role="alert" invisible="state == 'authorized'">
+                        <strong><i class="fa fa-info-circle me-1"/> How to setup Microsoft Fabric Configuration:</strong>
+                        <ul class="mb-0 mt-1">
+                            <li>Ensure you have a Microsoft Entra ID (Azure AD) App with Fabric permissions.</li>
+                            <li>Fill in the <b>Client ID</b>, <b>Client Secret</b>, and <b>Tenant ID</b> below.</li>
+                            <li>Click the <b>Authorize</b> button at the top to connect Odoo to Microsoft Fabric.</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-info mt-3" role="alert" invisible="state != 'authorized'">
+                        <strong><i class="fa fa-lightbulb-o me-1"/> Next Steps for Fabric Integration:</strong>
+                        <ul class="mb-0 mt-1">
+                            <li><b>Discover Items:</b> Click this to sync all your existing Lakehouses, Warehouses, and Pipelines from Fabric into Odoo.</li>
+                            <li><b>Create Item:</b> Use this to quickly spin up a new Lakehouse or Warehouse directly from Odoo.</li>
+                            <li><b>Set Default Target:</b> Open the Lakehouses/Warehouses tab and set one item as your default destination for data syncing.</li>
+                            <li><b>Run Default Pipeline:</b> Trigger your Fabric data ingestion pipeline right from this screen!</li>
+                        </ul>
+                        <hr style="margin: 10px 0px; border-color: #bee5eb;"/>
+                        <strong><i class="fa fa-external-link me-1"/> How to manually create items inside Microsoft Fabric / Power BI:</strong>
+                        <ul class="mb-0 mt-1">
+                            <li><i>Step 1:</i> Go to <b>app.powerbi.com</b> and open your Workspace.</li>
+                            <li><i>Step 2:</i> Look for the Experience Switcher icon in the <b>bottom-left corner</b> (it usually says "Power BI" or "Fabric"). Click it.</li>
+                            <li><i>Step 3:</i> Choose the correct experience for what you want to build:
+                                <ul>
+                                    <li><b>Data Pipelines:</b> Select <b>Data Factory</b> (purple icon) -> Click "+ New" -> Data Pipeline.</li>
+                                    <li><b>Lakehouses &amp; Notebooks:</b> Select <b>Data Engineering</b> (blue icon) -> Click "+ New" -> Lakehouse.</li>
+                                    <li><b>Warehouses:</b> Select <b>Data Warehouse</b> (green icon) -> Click "+ New" -> Warehouse.</li>
+                                    <li><b>Eventhouses &amp; KQL DBs:</b> Select <b>Real-Time Intelligence</b> (orange icon) -> Click "+ New" -> Eventhouse.</li>
+                                </ul>
+                            </li>
+                            <li><i>Step 4:</i> Once created in Fabric, come back to Odoo and click <b>Discover Items</b> to sync them!</li>
+                        </ul>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_fabric_item_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.fabric.item.list</field>
+        <field name="model">sh.powerbi.fabric.item</field>
+        <field name="arch" type="xml">
+            <list string="Fabric Items">
+                <field name="name"/>
+                <field name="fabric_config_id"/>
+                <field name="item_type"/>
+                <field name="workspace_id"/>
+                <field name="external_id"/>
+                <field name="is_default_target"/>
+                <field name="last_run_state"/>
+                <button name="action_set_default_target" type="object" icon="fa-star" title="Set Default"/>
+                <button name="action_run_item" type="object" icon="fa-play" title="Run" invisible="item_type not in ('pipeline', 'copy_job')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_fabric_item_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.fabric.item.form</field>
+        <field name="model">sh.powerbi.fabric.item</field>
+        <field name="arch" type="xml">
+            <form string="Fabric Item">
+                <header>
+                    <button name="action_set_default_target" type="object" string="Set Default"/>
+                    <button name="action_run_item" type="object" string="Run" invisible="item_type not in ('pipeline', 'copy_job')"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="fabric_config_id"/>
+                            <field name="item_type"/>
+                            <field name="is_default_target"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="workspace_id"/>
+                            <field name="external_id"/>
+                            <field name="last_run_id"/>
+                            <field name="last_run_state"/>
+                            <field name="last_run_date"/>
+                        </group>
+                    </group>
+                    <group string="Raw Payload">
+                        <field name="raw_payload" readonly="1" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_fabric_pipeline_run_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.fabric.pipeline.run.list</field>
+        <field name="model">sh.powerbi.fabric.pipeline.run</field>
+        <field name="arch" type="xml">
+            <list string="Fabric Pipeline Runs" decoration-success="state == 'done'" decoration-danger="state == 'failed'" decoration-info="state == 'running'">
+                <field name="started_at"/>
+                <field name="name"/>
+                <field name="fabric_config_id"/>
+                <field name="fabric_item_id"/>
+                <field name="model_access_id"/>
+                <field name="state" widget="badge"/>
+                <field name="record_count"/>
+                <field name="duration_seconds"/>
+                <button name="action_poll_status" type="object" icon="fa-refresh" title="Poll Status" invisible="not status_url or state in ('done', 'failed', 'cancelled')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_fabric_pipeline_run_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.fabric.pipeline.run.form</field>
+        <field name="model">sh.powerbi.fabric.pipeline.run</field>
+        <field name="arch" type="xml">
+            <form string="Fabric Pipeline Run" create="false">
+                <header>
+                    <button name="action_poll_status" type="object" string="Poll Status" invisible="not status_url or state in ('done', 'failed', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,running,done,failed,cancelled"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="fabric_config_id"/>
+                            <field name="fabric_item_id"/>
+                            <field name="model_access_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="workspace_id"/>
+                            <field name="item_id"/>
+                            <field name="run_id"/>
+                            <field name="status_url"/>
+                            <field name="started_at"/>
+                            <field name="finished_at"/>
+                            <field name="duration_seconds"/>
+                            <field name="record_count"/>
+                        </group>
+                    </group>
+                    <group string="Message">
+                        <field name="message" readonly="1" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sh_powerbi_fabric_config" model="ir.actions.act_window">
+        <field name="name">Fabric Configurations</field>
+        <field name="res_model">sh.powerbi.fabric.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_sh_powerbi_fabric_item" model="ir.actions.act_window">
+        <field name="name">Fabric Items</field>
+        <field name="res_model">sh.powerbi.fabric.item</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_sh_powerbi_fabric_pipeline_run" model="ir.actions.act_window">
+        <field name="name">Fabric Pipeline Runs</field>
+        <field name="res_model">sh.powerbi.fabric.pipeline.run</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

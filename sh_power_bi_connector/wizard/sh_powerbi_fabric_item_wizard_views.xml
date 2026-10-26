@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+
+    <record id="sh_powerbi_fabric_item_wizard_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.fabric.item.wizard.form</field>
+        <field name="model">sh.powerbi.fabric.item.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Fabric Item">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="fabric_config_id" invisible="1"/>
+                            <field name="name"/>
+                            <field name="item_type"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Optional description..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Create" name="action_create_item" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

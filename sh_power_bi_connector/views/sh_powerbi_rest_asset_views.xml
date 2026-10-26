@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+
+    <!-- ── List View ──────────────────────────────────────────────────────── -->
+    <record id="sh_powerbi_workspace_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.workspace.list</field>
+        <field name="model">sh.powerbi.workspace</field>
+        <field name="arch" type="xml">
+            <list string="Power BI Workspaces" decoration-success="is_selected">
+                <field name="name"/>
+                <field name="external_id"/>
+                <field name="push_config_id"/>
+                <field name="is_selected" widget="boolean_toggle"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <button name="action_use_workspace" type="object" icon="fa-check" title="Use Workspace" invisible="is_selected"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ── Kanban View ────────────────────────────────────────────────────── -->
+    <record id="sh_powerbi_workspace_view_kanban" model="ir.ui.view">
+        <field name="name">sh.powerbi.workspace.kanban</field>
+        <field name="model">sh.powerbi.workspace</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="external_id"/>
+                <field name="push_config_id"/>
+                <field name="is_selected"/>
+                <field name="count_datasets"/>
+                <field name="count_reports"/>
+                <field name="count_eventhouses"/>
+                <field name="count_databases"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="p-3 bg-white rounded-3 shadow-sm position-relative #{record.is_selected.raw_value ? 'border border-2 border-success' : 'border border-light'}">
+                            
+                            <!-- Header Area -->
+                            <div class="d-flex align-items-center mb-4">
+                                <!-- Logo Icon -->
+                                <div class="d-flex align-items-center justify-content-center text-white rounded me-3" 
+                                     style="background: #00A3A1; width: 42px; height: 42px; flex-shrink: 0;">
+                                    <i class="fa fa-cubes fs-4" title="Workspace" aria-label="Workspace"/>
+                                </div>
+                                
+                                <!-- Name & ID -->
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <div class="fw-bold fs-5 text-truncate" style="color: #2D3748;">
+                                        <field name="name"/>
+                                    </div>
+                                    <div class="text-muted text-truncate" style="font-size: 0.75rem; color: #A0AEC0;">
+                                        <field name="external_id"/>
+                                    </div>
+                                </div>
+
+                                <!-- Status Badge -->
+                                <div class="ms-2">
+                                    <span class="badge rounded-pill d-inline-flex align-items-center px-3 py-2" 
+                                          style="background: #E6FFFA; color: #00A3A1; border: 1px solid #B2F5EA; font-size: 0.7rem; letter-spacing: 0.5px;">
+                                        <span style="height: 6px; width: 6px; background-color: #00A3A1; border-radius: 50%; display: inline-block; margin-right: 6px;"></span>
+                                        <t t-if="record.is_selected.raw_value">SELECTED</t>
+                                        <t t-else="">PUBLISHED</t>
+                                    </span>
+                                </div>
+
+                                <!-- Action Dropdown -->
+                                <div class="o_dropdown_kanban dropdown ms-2">
+                                    <a role="button" class="dropdown-toggle o-no-caret btn btn-sm btn-link text-muted p-0" data-bs-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v fs-5"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <button name="action_use_workspace" type="object" class="dropdown-item" invisible="is_selected">
+                                            <i class="fa fa-check text-success me-2"/> Use this Workspace
+                                        </button>
+                                        <a t-if="widget.editable" role="menuitem" type="edit" class="dropdown-item">
+                                            <i class="fa fa-pencil me-2"/> Edit
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Metrics 2x2 Grid -->
+                            <div class="row g-2">
+                                <!-- Eventhouses -->
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center rounded p-2" style="background: #E6FFFA; border: 1px solid #E2E8F0;">
+                                        <div class="d-flex align-items-center justify-content-center text-white rounded-circle me-2" 
+                                             style="background: #38B2AC; width: 32px; height: 32px; flex-shrink: 0;">
+                                            <i class="fa fa-bolt" title="Eventhouses" aria-label="Eventhouses"/>
+                                        </div>
+                                        <div class="d-flex flex-column w-100 align-items-end">
+                                            <div class="fw-bold fs-5 lh-1 mb-1" style="color: #2D3748;">
+                                                <field name="count_eventhouses"/>
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.7rem; text-transform: capitalize;">Eventhouses</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Datasets -->
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center rounded p-2" style="background: #E6FFFA; border: 1px solid #E2E8F0;">
+                                        <div class="d-flex align-items-center justify-content-center text-white rounded-circle me-2" 
+                                             style="background: #00A3A1; width: 32px; height: 32px; flex-shrink: 0;">
+                                            <i class="fa fa-table" title="Datasets" aria-label="Datasets"/>
+                                        </div>
+                                        <div class="d-flex flex-column w-100 align-items-end">
+                                            <div class="fw-bold fs-5 lh-1 mb-1" style="color: #2D3748;">
+                                                <field name="count_datasets"/>
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.7rem; text-transform: capitalize;">Datasets</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Reports -->
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center rounded p-2" style="background: #E6FFFA; border: 1px solid #E2E8F0;">
+                                        <div class="d-flex align-items-center justify-content-center text-white rounded-circle me-2" 
+                                             style="background: #008080; width: 32px; height: 32px; flex-shrink: 0;">
+                                            <i class="fa fa-bar-chart" title="Reports" aria-label="Reports"/>
+                                        </div>
+                                        <div class="d-flex flex-column w-100 align-items-end">
+                                            <div class="fw-bold fs-5 lh-1 mb-1" style="color: #2D3748;">
+                                                <field name="count_reports"/>
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.7rem; text-transform: capitalize;">Reports</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Databases -->
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center rounded p-2" style="background: #E6FFFA; border: 1px solid #E2E8F0;">
+                                        <div class="d-flex align-items-center justify-content-center text-white rounded-circle me-2" 
+                                             style="background: #2C7A7B; width: 32px; height: 32px; flex-shrink: 0;">
+                                            <i class="fa fa-database" title="Databases" aria-label="Databases"/>
+                                        </div>
+                                        <div class="d-flex flex-column w-100 align-items-end">
+                                            <div class="fw-bold fs-5 lh-1 mb-1" style="color: #2D3748;">
+                                                <field name="count_databases"/>
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.7rem; text-transform: capitalize;">Databases</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ── Form View ──────────────────────────────────────────────────────── -->
+    <record id="sh_powerbi_workspace_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.workspace.form</field>
+        <field name="model">sh.powerbi.workspace</field>
+        <field name="arch" type="xml">
+            <form string="Power BI Workspace">
+                <header>
+                    <button name="action_fetch_eventhouses" type="object" string="Fetch Eventhouses" style="background-color: #00A3A1; border-color: #00A3A1; color: white;" class="btn btn-primary"/>
+                    <button name="action_fetch_datasets" type="object" string="Fetch Datasets" style="background-color: #00A3A1; border-color: #00A3A1; color: white;" class="btn btn-primary"/>
+                    <button name="action_fetch_reports" type="object" string="Fetch Reports" style="background-color: #00A3A1; border-color: #00A3A1; color: white;" class="btn btn-primary"/>
+                    <button name="action_fetch_dashboards" type="object" string="Fetch Dashboards" style="background-color: #00A3A1; border-color: #00A3A1; color: white;" class="btn btn-primary"/>
+                    <button name="action_use_workspace" type="object" string="Use this Workspace" class="btn-secondary" invisible="is_selected"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_eventhouses" type="object" class="oe_stat_button" icon="fa-database">
+                            <field name="count_eventhouses" widget="statinfo" string="Eventhouses"/>
+                        </button>
+                        <button name="action_view_databases" type="object" class="oe_stat_button" icon="fa-server">
+                            <field name="count_databases" widget="statinfo" string="Databases"/>
+                        </button>
+                        <button name="action_view_datasets" type="object" class="oe_stat_button" icon="fa-cubes">
+                            <field name="count_datasets" widget="statinfo" string="Datasets"/>
+                        </button>
+                        <button name="action_view_reports" type="object" class="oe_stat_button" icon="fa-bar-chart">
+                            <field name="count_reports" widget="statinfo" string="Reports"/>
+                        </button>
+                        <button name="action_view_dashboards" type="object" class="oe_stat_button" icon="fa-pie-chart">
+                            <field name="count_dashboards" widget="statinfo" string="Dashboards"/>
+                        </button>
+                    </div>
+                    
+                    <div class="alert alert-success mb-3" role="alert" invisible="not is_selected">
+                        <i class="fa fa-check-circle me-1" title="Selected"/>
+                        This is the currently selected workspace for pushing data.
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Workspace Name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="external_id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"/>
+                            <field name="push_config_id"/>
+                            <field name="is_selected" widget="boolean_toggle"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Eventhouses" name="eventhouses">
+                            <field name="eventhouse_ids" readonly="1">
+                                <list>
+                                    <field name="name" string="Eventhouse Name"/>
+                                    <field name="external_id" string="Eventhouse ID"/>
+                                    <field name="last_run_state" string="Status" widget="badge" decoration-success="last_run_state in ('success', 'Published', 'done')" decoration-danger="last_run_state in ('failed', 'error')" decoration-info="last_run_state == 'running'"/>
+                                    <field name="last_run_date" string="Created On"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Datasets" name="datasets">
+                            <field name="dataset_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="external_id"/>
+                                    <field name="last_refresh_status" widget="badge" decoration-success="last_refresh_status in ('success', 'Completed', 'done')" decoration-danger="last_refresh_status in ('failed', 'error')"/>
+                                    <field name="last_refresh_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Reports" name="reports">
+                            <field name="report_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="external_id"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description" widget="html" options="{'style-inline': true}"/>
+                        </page>
+                        <page string="Raw JSON Payload" name="raw_payload_page" invisible="1">
+                            <field name="raw_payload" widget="text"/>
+                        </page>
+                    </notebook>
+                    
+                    <div class="alert alert-info mt-3" role="alert">
+                        <strong><i class="fa fa-lightbulb-o me-1"/> Power BI Workspace Assets Guide:</strong>
+                        <ul class="mb-0 mt-1">
+                            <li><b>Eventhouses &amp; KQL DBs:</b> Perfect for high-frequency, real-time data streaming (like POS scans or IoT logs). To create one, switch to the <b>Real-Time Intelligence</b> experience inside Power BI and click "+ New".</li>
+                            <li><b>Datasets (Semantic Models):</b> The underlying data tables that power your reports. Odoo will automatically create these when you "Push Data" from the Push Configuration.</li>
+                            <li><b>Reports:</b> The visual dashboards created from your Datasets. Build them inside Power BI Desktop or the Power BI website, and then fetch them here to embed in Odoo.</li>
+                        </ul>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Dashboard Asset Views -->
+    <record id="sh_powerbi_dashboard_asset_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.dashboard.asset.view.list</field>
+        <field name="model">sh.powerbi.dashboard.asset</field>
+        <field name="arch" type="xml">
+            <list string="Power BI Dashboards">
+                <field name="name"/>
+                <field name="workspace_id"/>
+                <field name="is_read_only" widget="boolean_toggle"/>
+                <button name="action_view_embedded" type="object" string="View Embedded" class="btn btn-primary"/>
+                <button name="action_open_in_powerbi" type="object" icon="fa-external-link" title="Open in Power BI"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_dashboard_asset_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.dashboard.asset.view.form</field>
+        <field name="model">sh.powerbi.dashboard.asset</field>
+        <field name="arch" type="xml">
+            <form string="Power BI Dashboard">
+                <header>
+                    <button name="action_view_embedded" type="object" string="View Embedded" class="btn-primary"/>
+                    <button name="action_open_in_powerbi" type="object" string="Open in Power BI"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Dashboard Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="external_id"/>
+                            <field name="workspace_id"/>
+                            <field name="workspace_rel_id"/>
+                        </group>
+                        <group>
+                            <field name="push_config_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="is_read_only"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="URLs" name="urls">
+                            <group>
+                                <field name="web_url" widget="url"/>
+                                <field name="embed_url" widget="url"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sh_powerbi_dashboard_asset" model="ir.actions.act_window">
+        <field name="name">Dashboards</field>
+        <field name="res_model">sh.powerbi.dashboard.asset</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Power BI Dashboards found.
+            </p>
+            <p>
+                Click 'Fetch Dashboards' from your Workspace configuration to sync them.
+            </p>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_dataset_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.dataset.list</field>
+        <field name="model">sh.powerbi.dataset</field>
+        <field name="arch" type="xml">
+            <list string="Power BI Datasets">
+                <field name="name"/>
+                <field name="external_id"/>
+                <field name="push_config_id"/>
+                <field name="workspace_id"/>
+                <field name="is_refreshable"/>
+                <field name="last_refresh_status"/>
+                <field name="last_refresh_date"/>
+                <button name="action_refresh_dataset" type="object" icon="fa-refresh" title="Refresh Dataset"/>
+                <button name="action_get_refresh_history" type="object" icon="fa-history" title="Get Refresh History"/>
+                <button name="action_push_now" type="object" icon="fa-upload" title="Push Now"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_dataset_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.dataset.form</field>
+        <field name="model">sh.powerbi.dataset</field>
+        <field name="arch" type="xml">
+            <form string="Power BI Dataset">
+                <header>
+                    <button name="action_push_now" type="object" string="Push Now" class="btn-primary"/>
+                    <button name="action_refresh_dataset" type="object" string="Refresh Dataset"/>
+                    <button name="action_get_refresh_history" type="object" string="Get Refresh History"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="external_id"/>
+                            <field name="push_config_id"/>
+                            <field name="workspace_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="configured_by"/>
+                            <field name="is_refreshable"/>
+                            <field name="last_refresh_status"/>
+                            <field name="last_refresh_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Refresh History">
+                            <field name="refresh_history" readonly="1" nolabel="1"/>
+                        </page>
+                        <page string="Raw Payload">
+                            <field name="raw_payload" readonly="1" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_report_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.report.list</field>
+        <field name="model">sh.powerbi.report</field>
+        <field name="arch" type="xml">
+            <list string="Power BI Reports">
+                <field name="name"/>
+                <field name="external_id"/>
+                <field name="push_config_id"/>
+                <field name="dataset_id"/>
+                <field name="workspace_id"/>
+                <button name="action_view_embedded" type="object" icon="fa-eye" title="View Embedded"/>
+                <button name="action_open_in_powerbi" type="object" icon="fa-external-link" title="Open in Power BI"/>
+                <button name="action_generate_embed_token" type="object" icon="fa-key" title="Generate Embed Token"/>
+                <button name="action_export_pdf" type="object" icon="fa-file-pdf-o" title="Export PDF"/>
+                <button name="action_export_pptx" type="object" icon="fa-file-powerpoint-o" title="Export PPTX"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_report_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.report.form</field>
+        <field name="model">sh.powerbi.report</field>
+        <field name="arch" type="xml">
+            <form string="Power BI Report">
+                <header>
+                    <button name="action_view_embedded" type="object" string="View Embedded" class="btn-primary"/>
+                    <button name="action_open_in_powerbi" type="object" string="Open in Power BI"/>
+                    <button name="action_generate_embed_token" type="object" string="Generate Embed Token"/>
+                    <button name="action_rebind_to_dataset" type="object" string="Rebind Dataset"/>
+                    <button name="action_export_pdf" type="object" string="Export PDF"/>
+                    <button name="action_export_pptx" type="object" string="Export PPTX"/>
+                    <button name="action_export_png" type="object" string="Export PNG"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="external_id"/>
+                            <field name="push_config_id"/>
+                            <field name="dataset_id"/>
+                            <field name="powerbi_dataset_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="workspace_id"/>
+                            <field name="web_url" widget="url"/>
+                            <field name="embed_url" widget="url"/>
+                            <field name="embed_token_expiry"/>
+                        </group>
+                    </group>
+                    <group string="Raw Payload">
+                        <field name="raw_payload" readonly="1" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_export_job_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.export.job.list</field>
+        <field name="model">sh.powerbi.export.job</field>
+        <field name="arch" type="xml">
+            <list string="Power BI Export Jobs" decoration-success="state == 'done'" decoration-danger="state == 'failed'" decoration-info="state == 'running'">
+                <field name="name"/>
+                <field name="report_id"/>
+                <field name="export_format"/>
+                <field name="state" widget="badge"/>
+                <field name="percent_complete"/>
+                <button name="action_poll_export" type="object" icon="fa-refresh" title="Poll Export" invisible="state not in ('running', 'draft')"/>
+                <button name="action_download_export" type="object" icon="fa-download" title="Download" invisible="state != 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_export_job_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.export.job.form</field>
+        <field name="model">sh.powerbi.export.job</field>
+        <field name="arch" type="xml">
+            <form string="Power BI Export Job">
+                <header>
+                    <button name="action_start_export" type="object" string="Start Export" invisible="state != 'draft'"/>
+                    <button name="action_poll_export" type="object" string="Poll Export" invisible="state not in ('running', 'draft')"/>
+                    <button name="action_download_export" type="object" string="Download" invisible="state != 'done'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,running,done,failed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="push_config_id"/>
+                            <field name="report_id"/>
+                            <field name="export_format"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="export_id"/>
+                            <field name="percent_complete"/>
+                            <field name="export_filename"/>
+                            <field name="export_file" filename="export_filename"/>
+                        </group>
+                    </group>
+                    <group string="Error">
+                        <field name="error_message" readonly="1" nolabel="1"/>
+                    </group>
+                    <group string="Raw Payload">
+                        <field name="raw_payload" readonly="1" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sh_powerbi_workspace" model="ir.actions.act_window">
+        <field name="name">Power BI Workspaces</field>
+        <field name="res_model">sh.powerbi.workspace</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+    <record id="action_sh_powerbi_dataset" model="ir.actions.act_window">
+        <field name="name">Power BI Datasets</field>
+        <field name="res_model">sh.powerbi.dataset</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_sh_powerbi_report" model="ir.actions.act_window">
+        <field name="name">Power BI Reports</field>
+        <field name="res_model">sh.powerbi.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_sh_powerbi_export_job" model="ir.actions.act_window">
+        <field name="name">Power BI Export Jobs</field>
+        <field name="res_model">sh.powerbi.export.job</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

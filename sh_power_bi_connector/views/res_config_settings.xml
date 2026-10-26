@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+    <record id="res_config_settings_view_form_powerbi" model="ir.ui.view">
+        <field name="name">sh.res.config.settings.view.form.inherit.powerbi</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="1"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Power BI Connector" name="sh_power_bi_connector">
+
+                    <!-- ── API Key Block ─────────────────────────────── -->
+                    <block title="API Key (Pull from Odoo)" name="api_key_content">
+                        <setting string="Power BI Configuration" help="Configure API access for Power BI data connection">
+
+                            <div class="alert alert-info mb-3" role="alert">
+                                <i class="fa fa-info-circle me-2" title="Info"/>
+                                Use this section to configure the Power BI API integration.
+                                The API key allows Power BI Desktop to pull data from Odoo via the <code>.mez</code> connector.
+                            </div>
+
+                            <!-- Odoo URL -->
+                            <div class="row mb-3 align-items-center">
+                                <div>
+                                    <label for="sh_powerbi_odoo_url" class="d-block"/>
+                                    <field name="sh_powerbi_odoo_url" widget="CopyClipboardChar" readonly="1"/>
+                                </div>
+                            </div>
+
+                            <!-- API Key -->
+                            <div class="row mb-3 align-items-center">
+                                <div>
+                                    <label for="sh_powerbi_api_key" class="d-block"/>
+                                    <field name="sh_powerbi_api_key" widget="CopyClipboardChar" readonly="1"/>
+                                </div>
+                            </div>
+
+                            <!-- DB Name -->
+                            <div class="row mb-3 align-items-center">
+                                <div>
+                                    <label for="sh_powerbi_db_name" class="d-block"/>
+                                    <field name="sh_powerbi_db_name" widget="CopyClipboardChar" readonly="1"/>
+                                </div>
+                            </div>
+
+                            <!-- Key Expiry -->
+                            <div class="row mb-3 align-items-center" invisible="not sh_powerbi_key_expiry">
+                                <div>
+                                    <label for="sh_powerbi_key_expiry" class="d-block"/>
+                                    <field name="sh_powerbi_key_expiry" readonly="1"/>
+                                </div>
+                            </div>
+
+                            <!-- Action buttons -->
+                            <div class="row mb-3">
+                                <div class="col-12 d-flex gap-2">
+                                    <button name="action_generate_powerbi_apikey"
+                                            type="object"
+                                            string="Generate New API Key"
+                                            class="btn btn-primary">
+                                        <i class="fa fa-refresh me-1"/> Generate Key
+                                    </button>
+                                    <button name="action_test_powerbi_connection"
+                                            type="object"
+                                            string="Test Connection"
+                                            class="btn btn-secondary"
+                                            invisible="not sh_powerbi_api_key">
+                                        <i class="fa fa-plug me-1"/> Test Connection
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Status alerts -->
+                            <div class="row" invisible="not sh_powerbi_api_key">
+                                <div class="col-12">
+                                    <!-- Green: valid key, no expiry concern -->
+                                    <div class="alert alert-success d-flex align-items-center"
+                                         role="alert"
+                                         invisible="not sh_powerbi_api_key or not sh_powerbi_key_expiry">
+                                        <i class="fa fa-check-circle me-3 fa-lg" title="Success"/>
+                                        <div>
+                                            <strong>API Key Active</strong><br/>
+                                            Your Power BI integration is configured. Key expires on
+                                            <field name="sh_powerbi_key_expiry" readonly="1" nolabel="1"/>.
+                                        </div>
+                                    </div>
+                                    <!-- Fallback when expiry is not set (old clients upgrading) -->
+                                    <div class="alert alert-success d-flex align-items-center"
+                                         role="alert"
+                                         invisible="not sh_powerbi_api_key or sh_powerbi_key_expiry">
+                                        <i class="fa fa-check-circle me-3 fa-lg" title="Success"/>
+                                        <div>
+                                            <strong>API Key Active</strong><br/>
+                                            Your Power BI integration is ready. Regenerate the key to set a 30-day expiry.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Log shortcut -->
+                            <div class="row mt-2" invisible="not sh_powerbi_api_key">
+                                <div class="col-12">
+                                    <button name="%(sh_power_bi_connector.action_sh_powerbi_log)d"
+                                            type="action"
+                                            string="View Power BI Logs"
+                                            class="btn btn-link ps-0">
+                                        <i class="fa fa-list-alt me-1"/> View Audit Logs
+                                    </button>
+                                </div>
+                            </div>
+
+                        </setting>
+                    </block>
+
+                    <!-- ── Data Access Mode Block ─────────────────────── -->
+                    <block title="Data Access Mode" name="powerbi_access_mode">
+                        <setting string="Power BI Pull Mode"
+                                 help="Controls which Odoo models Power BI can access when pulling data via the .mez connector.">
+                            <div class="alert alert-info mb-3" role="alert">
+                                <i class="fa fa-info-circle me-2" title="Info"/>
+                                <strong>All Accessible Models</strong>: Power BI Desktop shows every model the API key user has read access to.<br/>
+                                <strong>Configured Models Only</strong>: Power BI Desktop shows only the models you have explicitly configured below, with the specific fields and row filters you defined.
+                            </div>
+                            <field name="sh_powerbi_fetch_mode" widget="radio"/>
+                            <div class="mt-2">
+                                <button name="%(sh_power_bi_connector.action_sh_powerbi_model_access)d"
+                                        type="action"
+                                        string="Manage Model Access"
+                                        class="btn btn-secondary btn-sm">
+                                    <i class="fa fa-table me-1"/> Manage Model Access
+                                </button>
+                            </div>
+                        </setting>
+                        <setting string="Relational Field Format"
+                                 help="Controls how relational fields (Many2one, One2many, Many2many) are returned to Power BI to enable table relationships.">
+                            <div class="alert alert-info mb-3" role="alert">
+                                <i class="fa fa-info-circle me-2" title="Info"/>
+                                <strong>ID and Display Name</strong>: Foreign keys (e.g. <code>product_tmpl_id</code>) return numeric IDs so you can create direct relationships with target table IDs in Power BI, with companion <code>_display</code> columns for visuals.<br/>
+                                <strong>Numeric ID Only</strong>: Returns numeric IDs only for pure relational star schemas.<br/>
+                                <strong>Display Name Only</strong>: Legacy format (text name in foreign key column).
+                            </div>
+                            <field name="sh_powerbi_relation_format" widget="radio"/>
+                        </setting>
+                    </block>
+
+                    <!-- ── Push to Power BI Block ─────────────────────── -->
+                    <block title="Push to Power BI (REST API)" name="powerbi_push_config">
+                        <setting string="Automatic Data Push"
+                                 help="Optionally push Odoo data directly into Power BI streaming datasets using the Power BI REST API and Azure AD authentication.">
+                            <div class="alert alert-info mb-3" role="alert">
+                                <i class="fa fa-info-circle me-2" title="Info"/>
+                                Configure an Azure AD app registration to push Odoo data into Power BI workspaces on a schedule.
+                                Requires: Azure Tenant ID, Client ID, Client Secret, and a Power BI Workspace ID.
+                            </div>
+                            <button name="%(sh_power_bi_connector.action_sh_powerbi_push_config)d"
+                                    type="action"
+                                    string="Manage Push Configurations"
+                                    class="btn btn-secondary">
+                                <i class="fa fa-upload me-1"/> Manage Push Configurations
+                            </button>
+                        </setting>
+                    </block>
+
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

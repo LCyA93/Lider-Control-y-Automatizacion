@@ -1,0 +1,23 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sh_powerbi_log_manager,sh.powerbi.log manager,model_sh_powerbi_log,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_log_user,sh.powerbi.log user,model_sh_powerbi_log,base.group_user,1,0,0,0
+access_sh_powerbi_model_access_manager,sh.powerbi.model.access manager,model_sh_powerbi_model_access,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_model_access_user,sh.powerbi.model.access user,model_sh_powerbi_model_access,base.group_user,1,0,0,0
+access_sh_powerbi_push_config_manager,sh.powerbi.push.config manager,model_sh_powerbi_push_config,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_push_queue_manager,sh.powerbi.push.queue manager,model_sh_powerbi_push_queue,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_schema_diff_wizard_user,sh.powerbi.schema.diff.wizard user,model_sh_powerbi_schema_diff_wizard,base.group_user,1,1,1,1
+access_sh_powerbi_fabric_config_manager,sh.powerbi.fabric.config manager,model_sh_powerbi_fabric_config,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_fabric_item_manager,sh.powerbi.fabric.item manager,model_sh_powerbi_fabric_item,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_fabric_pipeline_run_manager,sh.powerbi.fabric.pipeline.run manager,model_sh_powerbi_fabric_pipeline_run,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_workspace_manager,sh.powerbi.workspace manager,model_sh_powerbi_workspace,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_dataset_manager,sh.powerbi.dataset manager,model_sh_powerbi_dataset,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_report_manager,sh.powerbi.report manager,model_sh_powerbi_report,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_export_job_manager,sh.powerbi.export.job manager,model_sh_powerbi_export_job,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_sync_checkpoint_manager,sh.powerbi.sync.checkpoint manager,model_sh_powerbi_sync_checkpoint,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_tombstone_manager,sh.powerbi.tombstone manager,model_sh_powerbi_tombstone,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_validation_wizard_user,sh.powerbi.validation.wizard user,model_sh_powerbi_validation_wizard,base.group_user,1,1,1,1
+access_sh_powerbi_embedded_report_manager,sh.powerbi.embedded.report manager,model_sh_powerbi_embedded_report,sh_power_bi_connector.group_powerbi_manager,1,1,1,1
+access_sh_powerbi_embedded_report_user,sh.powerbi.embedded.report user,model_sh_powerbi_embedded_report,base.group_user,1,0,0,0
+access_sh_powerbi_fabric_item_wizard_user,sh.powerbi.fabric.item.wizard user,model_sh_powerbi_fabric_item_wizard,base.group_user,1,1,1,1
+access_sh_powerbi_report_preview_wizard_user,sh.powerbi.report.preview.wizard user,model_sh_powerbi_report_preview_wizard,base.group_user,1,1,1,1
+access_sh_powerbi_dashboard_asset_manager,sh.powerbi.dashboard.asset manager,model_sh_powerbi_dashboard_asset,sh_power_bi_connector.group_powerbi_manager,1,1,1,1

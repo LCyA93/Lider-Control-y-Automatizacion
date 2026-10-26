@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sh_powerbi_push_queue_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.push.queue.list</field>
+        <field name="model">sh.powerbi.push.queue</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state == 'failed'" decoration-success="state == 'done'" decoration-info="state == 'processing'">
+                <field name="id"/>
+                <field name="push_config_id"/>
+                <field name="model_access_id"/>
+                <field name="is_delta" widget="boolean_toggle" optional="show"/>
+                <field name="is_realtime" widget="boolean_toggle" optional="show"/>
+                <field name="batch_offset"/>
+                <field name="total_records"/>
+                <field name="retry_count"/>
+                <field name="next_retry_at"/>
+                <field name="state"/>
+                <field name="create_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_push_queue_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.push.queue.form</field>
+        <field name="model">sh.powerbi.push.queue</field>
+        <field name="arch" type="xml">
+            <form string="Push Queue Job">
+                <header>
+                    <button name="action_process_queue" string="Process Now" type="object" class="btn-primary" invisible="state == 'done'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,processing,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="push_config_id"/>
+                            <field name="model_access_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="is_delta"/>
+                            <field name="is_realtime"/>
+                            <field name="batch_offset"/>
+                            <field name="total_records"/>
+                            <field name="retry_count"/>
+                            <field name="max_retry_count"/>
+                            <field name="last_attempt_at"/>
+                            <field name="next_retry_at"/>
+                        </group>
+                    </group>
+                    <group string="Error Message" invisible="not error_message">
+                        <field name="error_message" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sh_powerbi_push_queue" model="ir.actions.act_window">
+        <field name="name">Push Queue</field>
+        <field name="res_model">sh.powerbi.push.queue</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data noupdate="1">
+
+    <!-- Sync Logs entity — always add if log_model was detected -->
+    <record id="sh_power_bi_connector_entity_sync_logs" model="sh.integration.entity">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="name">Sync Logs</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_log"/>
+        <field name="domain">[]</field>
+        <field name="icon">fa-history</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="sh_power_bi_connector_entity_model_access" model="sh.integration.entity">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="name">Power BI Model Access</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_model_access"/>
+        <field name="domain">[]</field>
+        <field name="icon">fa-database</field>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="sh_power_bi_connector_entity_push_config" model="sh.integration.entity">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="name">Push Config</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_push_config"/>
+        <field name="domain">[]</field>
+        <field name="icon">fa-cog</field>
+        <field name="sequence">3</field>
+    </record>
+
+    <record id="sh_power_bi_connector_entity_push_queue" model="sh.integration.entity">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="name">Push Queue</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_push_queue"/>
+        <field name="domain">[]</field>
+        <field name="icon">fa-list</field>
+        <field name="sequence">4</field>
+    </record>
+
+    <record id="sh_power_bi_connector_entity_fabric_config" model="sh.integration.entity">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="name">Fabric Config</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_fabric_config"/>
+        <field name="domain">[]</field>
+        <field name="icon">fa-cog</field>
+        <field name="sequence">5</field>
+    </record>
+
+    <record id="sh_power_bi_connector_entity_workspace" model="sh.integration.entity">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="name">Workspaces</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_workspace"/>
+        <field name="domain">[]</field>
+        <field name="icon">fa-cubes</field>
+        <field name="sequence">6</field>
+    </record>
+
+    <record id="sh_power_bi_connector_entity_fabric_item" model="sh.integration.entity">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="name">Fabric Items</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_fabric_item"/>
+        <field name="domain">[]</field>
+        <field name="icon">fa-cube</field>
+        <field name="sequence">7</field>
+    </record>
+
+    <record id="sh_power_bi_connector_entity_dataset" model="sh.integration.entity">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="name">Datasets</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_dataset"/>
+        <field name="domain">[]</field>
+        <field name="icon">fa-table</field>
+        <field name="sequence">8</field>
+    </record>
+
+    <record id="sh_power_bi_connector_entity_report" model="sh.integration.entity">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="name">Reports</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_report"/>
+        <field name="domain">[]</field>
+        <field name="icon">fa-bar-chart</field>
+        <field name="sequence">9</field>
+    </record>
+
+    <record id="sh_power_bi_connector_entity_dashboard_asset" model="sh.integration.entity">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="name">Dashboards</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_dashboard_asset"/>
+        <field name="domain">[]</field>
+        <field name="icon">fa-pie-chart</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="sh_power_bi_connector_entity_embedded_report" model="sh.integration.entity">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="name">Embedded Reports</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_embedded_report"/>
+        <field name="domain">[]</field>
+        <field name="icon">fa-bar-chart</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="sh_power_bi_connector_entity_pipeline_run" model="sh.integration.entity">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="name">Pipeline Runs</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_fabric_pipeline_run"/>
+        <field name="domain">[]</field>
+        <field name="icon">fa-history</field>
+        <field name="sequence">11</field>
+    </record>
+
+</data>
+</odoo>

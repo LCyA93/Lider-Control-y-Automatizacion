@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Push Config Multi-Company Rule -->
+        <record id="sh_powerbi_push_config_comp_rule" model="ir.rule">
+            <field name="name">Power BI Push Config Multi-Company</field>
+            <field name="model_id" ref="model_sh_powerbi_push_config"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Model Access Multi-Company Rule -->
+        <record id="sh_powerbi_model_access_comp_rule" model="ir.rule">
+            <field name="name">Power BI Model Access Multi-Company</field>
+            <field name="model_id" ref="model_sh_powerbi_model_access"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Logging Multi-Company Rule -->
+        <record id="sh_powerbi_log_comp_rule" model="ir.rule">
+            <field name="name">Power BI Log Multi-Company</field>
+            <field name="model_id" ref="model_sh_powerbi_log"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="sh_powerbi_fabric_config_comp_rule" model="ir.rule">
+            <field name="name">Power BI Fabric Config Multi-Company</field>
+            <field name="model_id" ref="model_sh_powerbi_fabric_config"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="sh_powerbi_fabric_item_comp_rule" model="ir.rule">
+            <field name="name">Power BI Fabric Item Multi-Company</field>
+            <field name="model_id" ref="model_sh_powerbi_fabric_item"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="sh_powerbi_fabric_pipeline_run_comp_rule" model="ir.rule">
+            <field name="name">Power BI Fabric Pipeline Run Multi-Company</field>
+            <field name="model_id" ref="model_sh_powerbi_fabric_pipeline_run"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="sh_powerbi_workspace_comp_rule" model="ir.rule">
+            <field name="name">Power BI Workspace Multi-Company</field>
+            <field name="model_id" ref="model_sh_powerbi_workspace"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="sh_powerbi_dataset_comp_rule" model="ir.rule">
+            <field name="name">Power BI Dataset Multi-Company</field>
+            <field name="model_id" ref="model_sh_powerbi_dataset"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="sh_powerbi_report_comp_rule" model="ir.rule">
+            <field name="name">Power BI Report Multi-Company</field>
+            <field name="model_id" ref="model_sh_powerbi_report"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="sh_powerbi_export_job_comp_rule" model="ir.rule">
+            <field name="name">Power BI Export Job Multi-Company</field>
+            <field name="model_id" ref="model_sh_powerbi_export_job"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="sh_powerbi_sync_checkpoint_comp_rule" model="ir.rule">
+            <field name="name">Power BI Sync Checkpoint Multi-Company</field>
+            <field name="model_id" ref="model_sh_powerbi_sync_checkpoint"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="sh_powerbi_tombstone_comp_rule" model="ir.rule">
+            <field name="name">Power BI Tombstone Multi-Company</field>
+            <field name="model_id" ref="model_sh_powerbi_tombstone"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

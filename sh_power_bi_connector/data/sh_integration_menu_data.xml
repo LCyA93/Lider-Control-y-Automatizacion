@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data noupdate="1">
+
+    <!-- Mirror child menus under the Hub -->
+    <record id="sh_power_bi_connector_menu_dashboard" model="sh.integration.connector.menu">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="source_menu_id" ref="sh_power_bi_connector.menu_sh_powerbi_dashboard"/>
+        <field name="sequence">1</field>
+        <field name="group_ids" eval="[(4, ref('sh_power_bi_connector.group_powerbi_manager'))]"/>
+    </record>
+
+    <record id="sh_power_bi_connector_menu_config" model="sh.integration.connector.menu">
+        <field name="connector_id" ref="sh_power_bi_connector_connector"/>
+        <field name="source_menu_id" ref="sh_power_bi_connector.menu_sh_powerbi_push_config"/>
+        <field name="sequence">2</field>
+        <field name="group_ids" eval="[(4, ref('sh_power_bi_connector.group_powerbi_manager'))]"/>
+    </record>
+
+</data>
+</odoo>

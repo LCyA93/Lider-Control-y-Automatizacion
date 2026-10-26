@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data noupdate="1">
+    <record id="sh_power_bi_connector_connector" model="sh.integration.connector">
+        <field name="name">Power BI Odoo Connector</field>
+        <field name="technical_name">sh_power_bi_connector</field>
+        <field name="sequence">10</field>
+        <field name="color">3</field>
+        <!-- Connection status -->
+        <field name="config_model">sh.powerbi.push.config</field>
+        <field name="connected_field">state</field>
+        <field name="connected_value">authorized</field>
+        <!-- Log -->
+        <field name="log_model">sh.powerbi.log</field>
+        <field name="log_date_field">datetime</field>
+        <field name="log_state_field">state</field>
+        <field name="log_error_value">error</field>
+        <field name="log_message_field">message</field>
+        <!-- Queue -->
+        <field name="queue_model">sh.powerbi.push.queue</field>
+        <field name="queue_state_field">state</field>
+        <field name="queue_pending_value">draft</field>
+        <field name="queue_done_value">done</field>
+        <field name="queue_error_value">failed</field>
+        <!-- Actions — plain XML ID strings, NOT refs -->
+        <field name="dashboard_action">sh_power_bi_connector.action_sh_powerbi_dashboard</field>
+        <field name="config_action">sh_power_bi_connector.action_sh_powerbi_push_config</field>
+        <!-- Menu -->
+        <field name="menu_name">Power BI</field>
+        <field name="menu_sequence">10</field>
+    </record>
+
+    <!-- Admin always gets connector manager rights (menu visibility + record access) -->
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('sh_power_bi_connector.group_powerbi_manager'))]"/>
+    </record>
+
+</data>
+
+<data noupdate="0">
+    <!-- Trigger dynamic menu reparenting on every module upgrade to ensure Hub consistency -->
+    <function model="sh.integration.connector" name="action_sync_menus_by_module">
+        <value>sh_power_bi_connector</value>
+    </function>
+</data>
+</odoo>

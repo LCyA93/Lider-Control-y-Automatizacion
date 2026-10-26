@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+
+    <!-- List View -->
+    <record id="sh_powerbi_log_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.log.view.list</field>
+        <field name="model">sh.powerbi.log</field>
+        <field name="arch" type="xml">
+            <list string="Power BI Logs" decoration-danger="state == 'error'" decoration-success="state == 'success'" default_order="datetime desc">
+                <field name="name"/>
+                <field name="datetime"/>
+                <field name="log_type"/>
+                <field name="state" widget="badge" decoration-success="state == 'success'" decoration-danger="state == 'error'"/>
+                <field name="model_name"/>
+                <field name="record_count"/>
+                <field name="duration_ms" string="Duration (ms)" optional="show"/>
+                <field name="ip_address" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="sh_powerbi_log_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.log.view.form</field>
+        <field name="model">sh.powerbi.log</field>
+        <field name="arch" type="xml">
+            <form string="Power BI Log" create="false" edit="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="datetime"/>
+                            <field name="log_type"/>
+                            <field name="state" widget="badge" decoration-success="state == 'success'" decoration-danger="state == 'error'"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="model_name"/>
+                            <field name="record_count"/>
+                            <field name="duration_ms"/>
+                            <field name="ip_address"/>
+                        </group>
+                    </group>
+                    <group string="Details">
+                        <field name="message" nolabel="1" colspan="2"/>
+                    </group>
+                    <group string="Query" invisible="not query_text">
+                        <field name="query_text" nolabel="1" colspan="2" widget="code"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_sh_powerbi_log" model="ir.actions.act_window">
+        <field name="name">Power BI Logs</field>
+        <field name="res_model">sh.powerbi.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_group_log_type': 1}</field>
+    </record>
+
+</odoo>

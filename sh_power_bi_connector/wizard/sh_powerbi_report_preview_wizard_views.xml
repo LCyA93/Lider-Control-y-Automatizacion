@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+    <record id="sh_powerbi_report_preview_wizard_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.report.preview.wizard.form</field>
+        <field name="model">sh.powerbi.report.preview.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Report Preview">
+                <sheet>
+                    <field name="iframe_html" nolabel="1" widget="html" options="{'style-inline': true}" readonly="1"/>
+                </sheet>
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

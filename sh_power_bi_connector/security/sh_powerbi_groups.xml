@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+    <data>
+
+        <!-- Module Category -->
+        <record id="module_category_sh_power_bi_connector" model="ir.module.category">
+            <field name="name">Power BI Connector</field>
+            <field name="description">Power BI Odoo Integration</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <!-- Privilege group for the category -->
+        <record model="res.groups.privilege" id="res_groups_privilege_sh_power_bi_connector">
+            <field name="name">Power BI Connector</field>
+            <field name="category_id" ref="module_category_sh_power_bi_connector"/>
+        </record>
+
+        <!-- Power BI Manager Group -->
+        <record id="group_powerbi_manager" model="res.groups">
+            <field name="name">Power BI Manager</field>
+            <field name="privilege_id" ref="res_groups_privilege_sh_power_bi_connector"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+            <field name="comment">Manage Power BI connector configuration, model access rules, push datasets, and view audit logs.</field>
+        </record>
+    </data>
+</odoo>

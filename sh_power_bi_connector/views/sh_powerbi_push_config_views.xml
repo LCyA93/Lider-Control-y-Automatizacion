@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+
+    <!-- List View -->
+    <record id="sh_powerbi_push_config_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.push.config.view.list</field>
+        <field name="model">sh.powerbi.push.config</field>
+        <field name="arch" type="xml">
+            <list string="Power BI Push Configurations">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'authorized'"
+                       decoration-warning="state == 'draft'"
+                       decoration-danger="state == 'error'"/>
+                <field name="powerbi_workspace_id"/>
+                <field name="powerbi_token_expiry"/>
+                <field name="cron_interval_hours"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Server action for inline Push Now button -->
+    <record id="action_push_model_inline" model="ir.actions.server">
+        <field name="name">Push to Power BI Now</field>
+        <field name="model_id" ref="model_sh_powerbi_model_access"/>
+        <field name="binding_model_id" ref="model_sh_powerbi_model_access"/>
+        <field name="state">code</field>
+        <field name="code">
+for record in records:
+    push_configs = env['sh.powerbi.push.config'].search([
+        ('company_id', '=', record.company_id.id),
+        ('state', '=', 'authorized'),
+    ], limit=1)
+    if push_configs:
+        push_configs.action_push_model(record.id)
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="sh_powerbi_push_config_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.push.config.view.form</field>
+        <field name="model">sh.powerbi.push.config</field>
+        <field name="arch" type="xml">
+            <form string="Power BI Push Configuration">
+                <header>
+                    <button name="action_authorize" type="object" string="Authorize"
+                            class="btn-primary"
+                            invisible="state == 'authorized'"/>
+                    <button name="action_authorize" type="object" string="Re-Authorize"
+                            class="btn-secondary"
+                            invisible="state != 'authorized'"/>
+                    <button name="action_test_connection" type="object" string="Test Connection"
+                            class="btn-secondary"
+                            invisible="state != 'authorized'"/>
+                    <button name="action_sync_workspaces" type="object" string="Discover Workspaces"
+                            class="btn-primary"
+                            invisible="state != 'authorized'"/>
+                    <button name="action_sync_datasets" type="object" string="Discover Datasets"
+                            class="btn-secondary"
+                            invisible="state != 'authorized'"/>
+                    <button name="action_sync_reports" type="object" string="Discover Reports"
+                            class="btn-secondary"
+                            invisible="state != 'authorized'"/>
+                    <button name="action_rebuild_all_datasets" type="object" string="Rebuild Datasets"
+                            class="btn-warning"
+                            confirm="This recreates every Power BI dataset of this configuration. Existing reports must be rebound to the new datasets. Continue?"
+                            invisible="state != 'authorized'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,authorized,error"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_workspaces" type="object" class="oe_stat_button" icon="fa-folder-open-o">
+                            <field name="count_workspaces" widget="statinfo" string="Workspaces"/>
+                        </button>
+                        <button name="action_view_datasets" type="object" class="oe_stat_button" icon="fa-cubes">
+                            <field name="count_datasets" widget="statinfo" string="Datasets"/>
+                        </button>
+                        <button name="action_view_reports" type="object" class="oe_stat_button" icon="fa-bar-chart">
+                            <field name="count_reports" widget="statinfo" string="Reports"/>
+                        </button>
+                        <button name="action_view_export_jobs" type="object" class="oe_stat_button" icon="fa-tasks">
+                            <field name="count_export_jobs" widget="statinfo" string="Export Jobs"/>
+                        </button>
+                    </div>
+                    <div class="alert alert-warning mb-2" role="alert" invisible="state == 'draft'">
+                        <h4 class="alert-heading" role="status"><i class="fa fa-warning me-2" title="Warning"/>Before You Push!</h4>
+                        <p class="mb-0">
+                            Power BI requires you to explicitly add your <strong>Azure AD Application</strong> 
+                            as a <strong>Member</strong> or <strong>Admin</strong> of the target workspace.
+                        </p>
+                        <hr class="my-2"/>
+                        <ol class="mb-0 small">
+                            <li>Open <a href="https://app.powerbi.com" target="_blank">Power BI Service</a></li>
+                            <li>Go to your Workspace &#8594; <strong>Manage access</strong></li>
+                            <li>Add your Azure App name: <code><field name="name" readonly="1" class="fw-bold"/></code></li>
+                        </ol>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_sh_powerbi_log)d" type="action"
+                                class="oe_stat_button" icon="fa-list-alt">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Logs</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Main Workspace"/></h1>
+                    </div>
+                    
+                    <div class="alert alert-info" role="alert" invisible="state == 'authorized'" style="margin-top: 10px; margin-bottom: 20px;">
+                        <strong><i class="fa fa-info-circle me-1"/> How to setup Power BI Push Integration:</strong>
+                        <ul class="mb-0 mt-1">
+                            <li>Ensure you have a Microsoft Entra ID (Azure AD) App with Power BI Service permissions.</li>
+                            <li>Fill in the <b>Client ID</b>, <b>Client Secret</b>, and <b>Tenant ID</b> below.</li>
+                            <li>Click the <b>Authorize</b> button at the top to connect Odoo to Power BI.</li>
+                            <li>Once authorized, click <b>Discover Workspaces</b> to fetch your available workspaces.</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-info" role="alert" invisible="state != 'authorized'" style="margin-top: 10px; margin-bottom: 20px;">
+                        <strong><i class="fa fa-lightbulb-o me-1"/> Next Steps for Power BI Data Sync:</strong>
+                        <ul class="mb-0 mt-1">
+                            <li><b>Map Models:</b> Go to the 'Model Access' tab below to expose Odoo models/tables to Power BI.</li>
+                            <li><b>Push Data Now:</b> Click the button next to a mapped model to instantly push its records to a Power BI Dataset.</li>
+                            <li><b>Automate:</b> Configure the 'Cron Interval (Hours)' below to automatically push new and updated records in the background.</li>
+                        </ul>
+                    </div>
+
+                    <group>
+                        <group string="Azure AD Credentials">
+                            <field name="azure_tenant_id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"/>
+                            <field name="azure_client_id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"/>
+                            <field name="azure_client_secret" password="True"/>
+                        </group>
+                        <group string="Power BI Workspace">
+                            <field name="powerbi_workspace_id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="cron_interval_hours"/>
+                            <field name="push_batch_size"/>
+                        </group>
+                    </group>
+
+                    <group string="OAuth Token Status" invisible="state == 'draft'">
+                        <field name="powerbi_token_expiry" readonly="1"/>
+                        <div colspan="2" class="text-muted mt-2">
+                            <i class="fa fa-info-circle me-1" title="Note"/>
+                            <em>Note: For security reasons, Microsoft Azure limits access tokens to a 1-hour lifespan. Odoo automatically refreshes this token in the background before pushing data, so no manual action is ever required.</em>
+                        </div>
+                    </group>
+
+                    <notebook>
+                        <page string="Model Access" name="model_access">
+                            <div class="alert alert-info" role="alert">
+                                <i class="fa fa-info-circle me-2" title="Info"/>
+                                Configure which Odoo models are pushed to Power BI. Each model can have
+                                specific fields and a row filter. Use <strong>Settings → Power BI → Data Access Mode</strong>
+                                to switch between "All Models" and "Configured Models Only" pull mode.
+                            </div>
+                            <field name="model_access_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="model_id" options="{'no_create': True}"/>
+                                    <field name="display_alias"/>
+                                    <field name="target_mode"/>
+                                    <field name="fabric_config_id" optional="hide"/>
+                                    <field name="fabric_target_name" optional="hide"/>
+                                    <field name="domain_filter"/>
+                                    <field name="odoo_record_count" string="Records"/>
+                                    <field name="last_push_date"/>
+                                    <field name="last_fabric_sync_date" optional="hide"/>
+                                    <field name="is_active" widget="boolean_toggle"/>
+                                    <button name="action_preview_data" type="object"
+                                            icon="fa-eye" title="Preview Data"/>
+                                    <button name="%(sh_power_bi_connector.action_push_model_inline)d"
+                                            type="action" icon="fa-upload" title="Push Now"
+                                            invisible="not id"/>
+                                </list>
+                            </field>
+
+                            <!-- Power BI Setup Guide -->
+                            <div class="alert alert-info mt-3" role="alert">
+                                <h5 class="alert-heading" role="status">
+                                    <i class="fa fa-book me-2" title="Guide"/>Power BI Setup Guide — Required Steps Before Pushing
+                                </h5>
+                                <hr class="my-2"/>
+
+                                <p class="mb-1"><strong>Step 1 — Enable Service Principal in Power BI Admin Portal</strong></p>
+                                <ol class="mb-2 small">
+                                    <li>Go to <strong>app.powerbi.com</strong> → top-right gear icon → <strong>Admin portal</strong></li>
+                                    <li>Navigate to <strong>Tenant settings</strong></li>
+                                    <li>Find <strong>"Allow service principals to use Power BI APIs"</strong> (under Developer settings)</li>
+                                    <li>Set to <strong>Enabled</strong> for entire organization → click <strong>Apply</strong></li>
+                                    <li class="text-danger">&#9888; Changes can take up to <strong>15 minutes</strong> to take effect</li>
+                                </ol>
+
+                                <p class="mb-1"><strong>Step 2 — Create a Group Workspace (not "My workspace")</strong></p>
+                                <ol class="mb-2 small">
+                                    <li>In Power BI service → left sidebar → <strong>Workspaces</strong> → <strong>Create a workspace</strong></li>
+                                    <li>Give it a name (e.g. "Odoo Data") → click <strong>Apply</strong></li>
+                                    <li class="text-muted">No Premium license required for push datasets in group workspaces</li>
+                                </ol>
+
+                                <p class="mb-1"><strong>Step 3 — Add Your Azure App as Workspace Member</strong></p>
+                                <ol class="mb-2 small">
+                                    <li>Open your workspace → top-right <strong>"..."</strong> → <strong>Workspace settings</strong> → <strong>Access</strong> tab</li>
+                                    <li>Search for your Azure App's <strong>Display Name</strong> (from Azure Portal → App registrations)</li>
+                                    <li>Set role to <strong>Member</strong> or <strong>Admin</strong> → click <strong>Add</strong></li>
+                                </ol>
+
+                                <p class="mb-1"><strong>Step 4 — Get the Correct Workspace ID</strong></p>
+                                <ol class="mb-2 small">
+                                    <li>Open your workspace in Power BI service</li>
+                                    <li>Copy the GUID from the browser URL:<br/>
+                                        <code>https://app.powerbi.com/groups/<strong>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</strong>/list</code>
+                                    </li>
+                                    <li>Paste this GUID into the <strong>Power BI Workspace ID</strong> field above</li>
+                                    <li class="text-danger">&#9888; Do NOT use "My workspace" — it shows <code>me</code> in the URL and will not work with service principals</li>
+                                </ol>
+
+                                <p class="mb-1"><strong>Step 5 — Keep Azure API Permissions Clean</strong></p>
+                                <ol class="mb-2 small">
+                                    <li>This connector uses Azure <strong>client credentials</strong> / <strong>service principal</strong> authentication.</li>
+                                    <li>Power BI <strong>Delegated</strong> permissions such as <code>Dataset.ReadWrite.All</code> and <code>Workspace.Read.All</code> are not used by this flow.</li>
+                                    <li>Do not rely on Azure API permissions to grant workspace access. Use Power BI Admin Portal tenant settings and workspace access instead.</li>
+                                </ol>
+
+                                <p class="mb-1"><strong>Step 6 — Test the Connection</strong></p>
+                                <ol class="mb-0 small">
+                                    <li>Click <strong>Authorize</strong> above to obtain the access token</li>
+                                    <li>Click <strong>Test Connection</strong> — a success message confirms workspace access</li>
+                                    <li>If test fails: recheck Steps 1–5, especially the 15-minute propagation delay after Step 1</li>
+                                </ol>
+                            </div>
+                        </page>
+                        <page string="Power BI Assets" name="powerbi_assets">
+                            <group string="PBIX Import">
+                                <field name="pbix_file" filename="pbix_filename"/>
+                                <field name="pbix_filename" invisible="1"/>
+                                <button name="action_import_pbix" type="object" string="Import PBIX" class="btn-primary"/>
+                            </group>
+                            <notebook>
+                                <page string="Workspaces">
+                                    <field name="workspace_ids" readonly="1">
+                                        <list>
+                                            <field name="name"/>
+                                            <field name="external_id"/>
+                                            <field name="is_selected"/>
+                                        </list>
+                                    </field>
+                                </page>
+                                <page string="Datasets">
+                                    <field name="dataset_ids">
+                                        <list>
+                                            <field name="name"/>
+                                            <field name="external_id"/>
+                                            <field name="is_refreshable"/>
+                                            <field name="last_refresh_status"/>
+                                            <field name="last_refresh_date"/>
+                                            <button name="action_push_now" type="object" icon="fa-upload" title="Push Now"/>
+                                            <button name="action_get_refresh_history" type="object" icon="fa-history" title="Get Refresh History"/>
+                                        </list>
+                                    </field>
+                                </page>
+                                <page string="Reports">
+                                    <field name="report_ids" readonly="1">
+                                        <list>
+                                            <field name="name"/>
+                                            <field name="external_id"/>
+                                            <field name="powerbi_dataset_id"/>
+                                            <field name="web_url"/>
+                                        </list>
+                                    </field>
+                                </page>
+                                <page string="Export Jobs">
+                                    <field name="export_job_ids" readonly="1">
+                                        <list>
+                                            <field name="name"/>
+                                            <field name="report_id"/>
+                                            <field name="export_format"/>
+                                            <field name="state"/>
+                                            <field name="percent_complete"/>
+                                        </list>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+    <!-- Action -->
+    <record id="action_sh_powerbi_push_config" model="ir.actions.act_window">
+        <field name="name">Power BI Push Configurations</field>
+        <field name="res_model">sh.powerbi.push.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

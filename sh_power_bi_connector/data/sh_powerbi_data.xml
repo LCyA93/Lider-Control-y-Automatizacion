@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+
+    <!-- Sequence for audit log references -->
+    <record id="seq_sh_powerbi_log" model="ir.sequence">
+        <field name="name">Power BI Log Sequence</field>
+        <field name="code">sh.powerbi.log</field>
+        <field name="prefix">PBI/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- ── Menus ────────────────────────────────────────────────────────── -->
+
+    <!-- Top-level menu (under Settings app) -->
+    <menuitem id="menu_sh_powerbi_root"
+              name="Power BI Connector"
+              sequence="99"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <!-- Sub-menu Categories -->
+    <menuitem id="menu_sh_powerbi_sub_powerbi"
+              name="Power BI"
+              parent="menu_sh_powerbi_root"
+              sequence="10"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_sub_fabric"
+              name="Microsoft Fabric"
+              parent="menu_sh_powerbi_root"
+              sequence="20"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_sub_gov"
+              name="Governance &amp; Logs"
+              parent="menu_sh_powerbi_root"
+              sequence="30"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_dashboard"
+              name="Dashboard"
+              parent="menu_sh_powerbi_sub_powerbi"
+              action="action_sh_powerbi_dashboard"
+              sequence="5"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_model_access"
+              name="Model Access"
+              parent="menu_sh_powerbi_sub_powerbi"
+              action="action_sh_powerbi_model_access"
+              sequence="10"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_push_config"
+              name="Push Configurations"
+              parent="menu_sh_powerbi_sub_powerbi"
+              action="action_sh_powerbi_push_config"
+              sequence="20"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_workspace"
+              name="Power BI Workspaces"
+              parent="menu_sh_powerbi_sub_powerbi"
+              action="action_sh_powerbi_workspace"
+              sequence="31"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_dataset"
+              name="Power BI Datasets"
+              parent="menu_sh_powerbi_sub_powerbi"
+              action="action_sh_powerbi_dataset"
+              sequence="32"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_report"
+              name="Power BI Reports"
+              parent="menu_sh_powerbi_sub_powerbi"
+              action="action_sh_powerbi_report"
+              sequence="33"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_export_job"
+              name="Export Jobs"
+              parent="menu_sh_powerbi_sub_powerbi"
+              action="action_sh_powerbi_export_job"
+              sequence="34"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_embedded_report"
+              name="Embedded Reports"
+              parent="menu_sh_powerbi_sub_powerbi"
+              action="sh_power_bi_connector.action_sh_powerbi_embedded_report"
+              sequence="35"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_fabric_config"
+              name="Fabric Configurations"
+              parent="menu_sh_powerbi_sub_fabric"
+              action="action_sh_powerbi_fabric_config"
+              sequence="25"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_fabric_item"
+              name="Fabric Items"
+              parent="menu_sh_powerbi_sub_fabric"
+              action="action_sh_powerbi_fabric_item"
+              sequence="26"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_fabric_pipeline_run"
+              name="Fabric Pipeline Runs"
+              parent="menu_sh_powerbi_sub_fabric"
+              action="action_sh_powerbi_fabric_pipeline_run"
+              sequence="27"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_logs"
+              name="Audit Logs"
+              parent="menu_sh_powerbi_sub_gov"
+              action="action_sh_powerbi_log"
+              sequence="40"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_push_queue"
+              name="Push Queue"
+              parent="menu_sh_powerbi_sub_gov"
+              action="action_sh_powerbi_push_queue"
+              sequence="45"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_sync_checkpoint"
+              name="Sync Checkpoints"
+              parent="menu_sh_powerbi_sub_gov"
+              action="action_sh_powerbi_sync_checkpoint"
+              sequence="50"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <menuitem id="menu_sh_powerbi_tombstone"
+              name="Deleted Records"
+              parent="menu_sh_powerbi_sub_gov"
+              action="action_sh_powerbi_tombstone"
+              sequence="60"
+              groups="sh_power_bi_connector.group_powerbi_manager"/>
+
+    <!-- ── Scheduled auto-push cron ─────────────────────────────────────── -->
+    <record id="sh_powerbi_auto_push_cron" model="ir.cron">
+        <field name="name">Power BI: Auto Push to Datasets</field>
+        <field name="model_id" ref="sh_power_bi_connector.model_sh_powerbi_push_config"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_push_all()</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="False"/>
+    </record>
+
+</odoo>

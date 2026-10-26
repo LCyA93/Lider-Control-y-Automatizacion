@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+
+    <record id="sh_powerbi_sync_checkpoint_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.sync.checkpoint.list</field>
+        <field name="model">sh.powerbi.sync.checkpoint</field>
+        <field name="arch" type="xml">
+            <list string="Sync Checkpoints" decoration-success="state == 'done'" decoration-danger="state == 'failed'" decoration-info="state == 'running'">
+                <field name="name"/>
+                <field name="model_access_id"/>
+                <field name="target"/>
+                <field name="state" widget="badge"/>
+                <field name="last_success_at"/>
+                <field name="last_write_date"/>
+                <field name="last_record_count"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_tombstone_view_list" model="ir.ui.view">
+        <field name="name">sh.powerbi.tombstone.list</field>
+        <field name="model">sh.powerbi.tombstone</field>
+        <field name="arch" type="xml">
+            <list string="Deleted Record Tombstones">
+                <field name="deleted_at"/>
+                <field name="model_name"/>
+                <field name="res_id"/>
+                <field name="model_access_id"/>
+                <field name="synced_powerbi"/>
+                <field name="synced_fabric"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sh_powerbi_validation_wizard_view_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.validation.wizard.form</field>
+        <field name="model">sh.powerbi.validation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Data Quality Validation">
+                <footer>
+                    <button name="action_validate" type="object" string="Validate" class="btn-primary"/>
+                    <button special="cancel" string="Close" class="btn-secondary"/>
+                </footer>
+                <sheet>
+                    <group>
+                        <field name="model_access_id"/>
+                        <field name="issue_count" readonly="1"/>
+                        <field name="warning_count" readonly="1"/>
+                    </group>
+                    <field name="summary_html" readonly="1" nolabel="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sh_powerbi_sync_checkpoint" model="ir.actions.act_window">
+        <field name="name">Sync Checkpoints</field>
+        <field name="res_model">sh.powerbi.sync.checkpoint</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="action_sh_powerbi_tombstone" model="ir.actions.act_window">
+        <field name="name">Deleted Record Tombstones</field>
+        <field name="res_model">sh.powerbi.tombstone</field>
+        <field name="view_mode">list</field>
+    </record>
+
+</odoo>

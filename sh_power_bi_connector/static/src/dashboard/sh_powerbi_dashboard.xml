@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sh_power_bi_connector.SHPowerBIDashboard">
+        <div class="o_sh_powerbi_dashboard h-100 overflow-auto">
+            <div class="o_sh_powerbi_dashboard_header">
+                <div>
+                    <h1>Power BI Dashboard</h1>
+                    <span t-if="data.generated_at" class="text-muted">
+                        Last Updated <t t-out="data.generated_at"/>
+                    </span>
+                </div>
+                <div class="o_sh_powerbi_dashboard_actions">
+                    <button class="btn btn-light" type="button" t-on-click="() => this.loadDashboard()" title="Refresh">
+                        <i class="fa fa-refresh me-1"/>
+                        Refresh
+                    </button>
+                    <button class="btn btn-primary" type="button" t-on-click="() => this.runCronNow()" title="Run Schedule Now">
+                        <i class="fa fa-play me-1"/>
+                        Run Schedule
+                    </button>
+                </div>
+            </div>
+
+            <div t-if="state.loading" class="o_sh_powerbi_loading">
+                <i class="fa fa-spinner fa-spin me-2"/>
+                Loading Power BI dashboard
+            </div>
+
+            <div t-elif="!hasDashboardData" class="o_sh_powerbi_empty">
+                <i class="fa fa-bar-chart"/>
+                <span t-out="emptyMessage"/>
+            </div>
+
+            <div t-else="" class="o_sh_powerbi_dashboard_body">
+                <div t-if="data.alerts.length" class="o_sh_powerbi_alerts">
+                    <t t-foreach="data.alerts" t-as="alert" t-key="alert_index">
+                        <div t-att-class="'alert mb-2 ' + alertClass(alert.level)" role="alert">
+                            <i class="fa fa-warning me-2"/>
+                            <t t-out="alert.message"/>
+                        </div>
+                    </t>
+                </div>
+
+                <section class="o_sh_powerbi_kpis">
+                    <t t-foreach="data.kpis" t-as="kpi" t-key="kpi.key">
+                        <div t-att-class="'o_sh_powerbi_kpi ' + kpiToneClass(kpi.tone)">
+                            <div class="o_sh_powerbi_kpi_icon">
+                                <i t-att-class="'fa ' + kpi.icon"/>
+                            </div>
+                            <div>
+                                <span class="o_sh_powerbi_kpi_label" t-out="kpi.label"/>
+                                <strong class="o_sh_powerbi_kpi_value" t-out="kpi.value"/>
+                                <span class="o_sh_powerbi_kpi_subtitle" t-out="kpi.subtitle"/>
+                            </div>
+                        </div>
+                    </t>
+                </section>
+
+                <section class="o_sh_powerbi_grid">
+                    <div class="o_sh_powerbi_panel o_sh_powerbi_panel_wide">
+                        <div class="o_sh_powerbi_panel_header">
+                            <div>
+                                <h2>Model Sync Status</h2>
+                                <span class="text-muted">Manual push, dataset, and source record status</span>
+                            </div>
+                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                    t-on-click="() => this.openAction('sh_power_bi_connector.action_sh_powerbi_model_access')">
+                                <i class="fa fa-table me-1"/>
+                                Model Access
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Model</th>
+                                        <th>Dataset</th>
+                                        <th>Last Status</th>
+                                        <th class="text-end">Source Rows</th>
+                                        <th class="text-end">Last Push</th>
+                                        <th>Mode</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="data.model_rows" t-as="row" t-key="row.id">
+                                        <td>
+                                            <button class="btn btn-link p-0 fw-semibold" type="button"
+                                                    t-on-click="() => this.openModel(row.id)">
+                                                <t t-out="row.alias"/>
+                                            </button>
+                                            <div class="text-muted small" t-out="row.model_name"/>
+                                        </td>
+                                        <td>
+                                            <span t-if="row.dataset_ready" class="badge text-bg-success">Ready</span>
+                                            <span t-else="" class="badge text-bg-secondary">Not Created</span>
+                                        </td>
+                                        <td>
+                                            <span t-att-class="'badge ' + badgeClass(row.sync_state)" t-out="row.sync_state_label"/>
+                                            <div t-if="row.queue_error" class="text-danger small text-truncate o_sh_powerbi_error_text"
+                                                 t-att-title="row.queue_error" t-out="row.queue_error"/>
+                                        </td>
+                                        <td class="text-end" t-out="row.source_count"/>
+                                        <td class="text-end">
+                                            <span t-if="row.last_push_date" t-out="row.last_push_date"/>
+                                            <span t-else="" class="text-muted">Never</span>
+                                            <div class="text-muted small">
+                                                <t t-out="row.last_push_count"/> rows
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span t-if="row.delta" class="badge text-bg-info me-1">Delta</span>
+                                            <span t-if="row.realtime" class="badge text-bg-primary">Real-time</span>
+                                            <span t-if="!row.delta &amp;&amp; !row.realtime" class="text-muted">Full</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <button class="btn btn-primary btn-sm" type="button"
+                                                    t-on-click="() => this.pushNow(row.id)"
+                                                    t-att-disabled="!row.active">
+                                                <i class="fa fa-upload me-1"/>
+                                                Push Now
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="!data.model_rows.length">
+                                        <td colspan="7" class="text-center text-muted py-4">No model access rows configured.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="o_sh_powerbi_panel">
+                        <div class="o_sh_powerbi_panel_header">
+                            <div>
+                                <h2>Automatic Push Schedule</h2>
+                                <span class="text-muted">Schedule and next execution</span>
+                            </div>
+                        </div>
+                        <dl class="o_sh_powerbi_cron">
+                            <dt>Status</dt>
+                            <dd>
+                                <span t-if="cron.active" class="badge text-bg-success">Active</span>
+                                <span t-else="" class="badge text-bg-secondary">Disabled</span>
+                            </dd>
+                            <dt>Next Call</dt>
+                            <dd t-out="cron.nextcall || '-'"/>
+                            <dt>Last Call</dt>
+                            <dd t-out="cron.lastcall || '-'"/>
+                            <dt>Interval</dt>
+                            <dd t-out="cron.interval"/>
+                            <dt>Failures</dt>
+                            <dd t-out="cron.failure_count"/>
+                        </dl>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button class="btn btn-outline-primary" type="button" t-on-click="() => this.toggleCron()">
+                                <i t-att-class="'fa me-1 ' + (cron.active ? 'fa-pause' : 'fa-play')"/>
+                                <t t-if="cron.active">Disable Schedule</t>
+                                <t t-else="">Enable Schedule</t>
+                            </button>
+                            <button class="btn btn-primary" type="button" t-on-click="() => this.runCronNow()">
+                                <i class="fa fa-forward me-1"/>
+                                Run Now
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="o_sh_powerbi_panel">
+                        <div class="o_sh_powerbi_panel_header">
+                            <div>
+                                <h2>Power BI Configurations</h2>
+                                <span class="text-muted">Workspace authorization overview</span>
+                            </div>
+                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                    t-on-click="() => this.openAction('sh_power_bi_connector.action_sh_powerbi_push_config')">
+                                <i class="fa fa-cog me-1"/>
+                                Open
+                            </button>
+                        </div>
+                        <div class="o_sh_powerbi_config_list">
+                            <div t-foreach="data.configs" t-as="config" t-key="config.id" class="o_sh_powerbi_config_item">
+                                <div>
+                                    <strong t-out="config.name"/>
+                                    <div class="text-muted small text-truncate" t-att-title="config.workspace_id" t-out="config.workspace_id || 'No workspace'"/>
+                                </div>
+                                <div class="text-end">
+                                    <span t-att-class="'badge ' + badgeClass(config.state)" t-out="config.state_label"/>
+                                    <button class="btn btn-outline-primary btn-sm mt-2" type="button"
+                                            t-on-click="() => this.testConnection(config.id)">
+                                        Test
+                                    </button>
+                                </div>
+                            </div>
+                            <div t-if="!data.configs.length" class="text-muted py-3">No Power BI configuration found.</div>
+                        </div>
+                    </div>
+
+                    <div class="o_sh_powerbi_panel">
+                        <div class="o_sh_powerbi_panel_header">
+                            <div>
+                                <h2>Fabric Configurations</h2>
+                                <span class="text-muted">Workspace and authorization overview</span>
+                            </div>
+                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                    t-on-click="() => this.openAction('sh_power_bi_connector.action_sh_powerbi_fabric_config')">
+                                <i class="fa fa-cloud me-1"/>
+                                Open
+                            </button>
+                        </div>
+                        <div class="o_sh_powerbi_config_list">
+                            <div t-foreach="data.fabric_configs || []" t-as="config" t-key="config.id" class="o_sh_powerbi_config_item">
+                                <div>
+                                    <strong t-out="config.name"/>
+                                    <div class="text-muted small text-truncate" t-att-title="config.workspace_id" t-out="config.workspace_name || config.workspace_id || 'No workspace'"/>
+                                </div>
+                                <div class="text-end">
+                                    <span t-att-class="'badge ' + badgeClass(config.state)" t-out="config.state_label"/>
+                                    <div class="text-muted small" t-out="config.target_type"/>
+                                </div>
+                            </div>
+                            <div t-if="!(data.fabric_configs || []).length" class="text-muted py-3">No Fabric configuration found.</div>
+                        </div>
+                    </div>
+
+                    <div class="o_sh_powerbi_panel o_sh_powerbi_panel_wide">
+                        <div class="o_sh_powerbi_panel_header">
+                            <div>
+                                <h2>Recent Fabric Runs</h2>
+                                <span class="text-muted">Pipeline, copy job, and KQL publish activity</span>
+                            </div>
+                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                    t-on-click="() => this.openAction('sh_power_bi_connector.action_sh_powerbi_fabric_pipeline_run')">
+                                <i class="fa fa-list me-1"/>
+                                Runs
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Started</th>
+                                        <th>Run</th>
+                                        <th>Config</th>
+                                        <th>Model</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Rows</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="data.fabric_runs || []" t-as="run" t-key="run.id">
+                                        <td t-out="run.started_at || '-'"/>
+                                        <td>
+                                            <strong t-out="run.name"/>
+                                            <div class="text-muted small" t-out="run.item_name"/>
+                                        </td>
+                                        <td t-out="run.config_name"/>
+                                        <td t-out="run.model_name || '-'"/>
+                                        <td>
+                                            <span t-att-class="'badge ' + badgeClass(run.state)" t-out="run.state_label"/>
+                                            <div t-if="run.message" class="text-muted small text-truncate o_sh_powerbi_error_text"
+                                                 t-att-title="run.message" t-out="run.message"/>
+                                        </td>
+                                        <td class="text-end" t-out="run.record_count"/>
+                                    </tr>
+                                    <tr t-if="!(data.fabric_runs || []).length">
+                                        <td colspan="6" class="text-center text-muted py-4">No Fabric runs found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="o_sh_powerbi_panel">
+                        <div class="o_sh_powerbi_panel_header">
+                            <div>
+                                <h2>Queue Status</h2>
+                                <span class="text-muted">Draft, Processing, Done, and Failed Jobs</span>
+                            </div>
+                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                    t-on-click="() => this.openAction('sh_power_bi_connector.action_sh_powerbi_push_queue')">
+                                <i class="fa fa-list me-1"/>
+                                Queue
+                            </button>
+                        </div>
+                        <div class="o_sh_powerbi_queue_chart">
+                            <t t-foreach="queueChart" t-as="item" t-key="item.state">
+                                <div class="o_sh_powerbi_bar_row">
+                                    <span class="o_sh_powerbi_bar_label" t-out="item.label"/>
+                                    <div class="o_sh_powerbi_bar_track">
+                                        <div t-att-class="'o_sh_powerbi_bar_fill o_sh_powerbi_bar_' + item.state"
+                                             t-att-style="'width: ' + item.percent + '%'"/>
+                                    </div>
+                                    <strong t-out="item.count"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                    <div class="o_sh_powerbi_panel o_sh_powerbi_panel_wide">
+                        <div class="o_sh_powerbi_panel_header">
+                            <div>
+                                <h2>14-Day Sync Activity</h2>
+                                <span class="text-muted">Success and error log trend</span>
+                            </div>
+                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                    t-on-click="() => this.openAction('sh_power_bi_connector.action_sh_powerbi_log')">
+                                <i class="fa fa-history me-1"/>
+                                Logs
+                            </button>
+                        </div>
+                        <div class="o_sh_powerbi_log_chart">
+                            <div t-foreach="logChart" t-as="day" t-key="day.label + day_index" class="o_sh_powerbi_log_day">
+                                <div class="o_sh_powerbi_log_stack" t-att-title="day.label + ': ' + day.total">
+                                    <div class="o_sh_powerbi_log_success" t-att-style="'height: ' + day.success_percent + '%'"/>
+                                    <div class="o_sh_powerbi_log_error" t-att-style="'height: ' + day.error_percent + '%'"/>
+                                </div>
+                                <span t-out="day.label"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="o_sh_powerbi_panel o_sh_powerbi_panel_wide">
+                        <div class="o_sh_powerbi_panel_header">
+                            <div>
+                                <h2>Recent Queue Jobs</h2>
+                                <span class="text-muted">Process failed or pending jobs directly</span>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Job</th>
+                                        <th>Model</th>
+                                        <th>Status</th>
+                                        <th>Progress</th>
+                                        <th>Retry</th>
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="data.queue_rows" t-as="queue" t-key="queue.id">
+                                        <td>#<t t-out="queue.id"/></td>
+                                        <td>
+                                            <t t-out="queue.model_name"/>
+                                            <div class="text-muted small" t-out="queue.config_name"/>
+                                        </td>
+                                        <td>
+                                            <span t-att-class="'badge ' + badgeClass(queue.state)" t-out="queue.state_label"/>
+                                            <div t-if="queue.error_message" class="text-danger small text-truncate o_sh_powerbi_error_text"
+                                                 t-att-title="queue.error_message" t-out="queue.error_message"/>
+                                        </td>
+                                        <td>
+                                            <t t-out="queue.batch_offset"/> / <t t-out="queue.total_records"/>
+                                        </td>
+                                        <td>
+                                            <t t-out="queue.retry_count"/>
+                                            <div class="text-muted small" t-out="queue.next_retry_at || ''"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <button class="btn btn-outline-primary btn-sm" type="button"
+                                                    t-on-click="() => this.processQueue(queue.id)"
+                                                    t-att-disabled="queue.state == 'done'">
+                                                Process
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="!data.queue_rows.length">
+                                        <td colspan="6" class="text-center text-muted py-4">No queue jobs found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="o_sh_powerbi_panel">
+                        <div class="o_sh_powerbi_panel_header">
+                            <div>
+                                <h2>Recent Logs</h2>
+                                <span class="text-muted">Latest connector events</span>
+                            </div>
+                        </div>
+                        <div class="o_sh_powerbi_log_list">
+                            <div t-foreach="data.log_rows" t-as="log" t-key="log.id" class="o_sh_powerbi_log_item">
+                                <div>
+                                    <span t-att-class="'badge me-2 ' + (log.state == 'success' ? 'text-bg-success' : 'text-bg-danger')" t-out="log.state_label"/>
+                                    <strong t-out="log.type_label"/>
+                                    <div class="text-muted small">
+                                        <t t-out="log.datetime"/> <t t-if="log.model_name">- <t t-out="log.model_name"/></t>
+                                    </div>
+                                    <div class="small text-truncate" t-att-title="log.message" t-out="log.message"/>
+                                </div>
+                            </div>
+                            <div t-if="!data.log_rows.length" class="text-muted py-3">No logs found.</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </t>
+</templates>

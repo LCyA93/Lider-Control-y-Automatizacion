@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sh_powerbi_schema_diff_wizard_form" model="ir.ui.view">
+        <field name="name">sh.powerbi.schema.diff.wizard.form</field>
+        <field name="model">sh.powerbi.schema.diff.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Schema Drift Detected">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="push_config_id" readonly="1"/>
+                            <field name="model_access_id" readonly="1"/>
+                            <field name="model_name" readonly="1"/>
+                            <field name="dataset_name" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="added_count" readonly="1"/>
+                            <field name="removed_count" readonly="1"/>
+                            <field name="summary_message" readonly="1"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-warning" role="alert" invisible="not is_destructive">
+                        <i class="fa fa-exclamation-triangle me-2" title="Warning"/>
+                        <strong>Warning:</strong> Destructive schema changes detected.
+                    </div>
+                    <div class="alert alert-info" role="alert" invisible="is_destructive">
+                        <i class="fa fa-info-circle me-2" title="Info"/>
+                        <strong>Info:</strong> Only additive schema changes were detected.
+                    </div>
+                    <field name="is_destructive" invisible="1"/>
+                    <field name="confirm_button_label" invisible="1"/>
+                    <field name="diff_html" widget="html"/>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_update" type="object" class="btn-primary" data-hotkey="q"
+                            string="Confirm and Update"
+                            invisible="is_destructive"/>
+                    <button name="action_confirm_update" type="object" class="btn-primary" data-hotkey="q"
+                            string="Confirm and Recreate Dataset"
+                            invisible="not is_destructive"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sh_powerbi_schema_diff_wizard" model="ir.actions.act_window">
+        <field name="name">Schema Drift Verification</field>
+        <field name="res_model">sh.powerbi.schema.diff.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

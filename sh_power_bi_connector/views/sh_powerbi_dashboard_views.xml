@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) Softhealer Technologies Pvt. Ltd. -->
+<odoo>
+    <record id="action_sh_powerbi_dashboard" model="ir.actions.client">
+        <field name="name">Power BI Dashboard</field>
+        <field name="tag">sh_powerbi_dashboard</field>
+    </record>
+
+</odoo>
