@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════
+         LIST VIEW
+    ══════════════════════════════════════════════════════════ -->
+    <record id="sh_integration_connector_list_view" model="ir.ui.view">
+        <field name="name">sh.integration.connector.list</field>
+        <field name="model">sh.integration.connector</field>
+        <field name="arch" type="xml">
+            <list string="Integration Connectors" decoration-muted="not active" create="0">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="technical_name"/>
+                <field name="config_model"/>
+                <field name="log_model_id"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         FORM VIEW
+    ══════════════════════════════════════════════════════════ -->
+    <record id="sh_integration_connector_form_view" model="ir.ui.view">
+        <field name="name">sh.integration.connector.form</field>
+        <field name="model">sh.integration.connector</field>
+        <field name="arch" type="xml">
+            <form string="Integration Connector" create="0">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Connector Name"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Identification">
+                            <field name="technical_name"/>
+                            <field name="sequence"/>
+                            <field name="color" widget="color_picker"/>
+                            <field name="active"/>
+                        </group>
+
+                        <group string="Connection Status Detection">
+                            <field name="config_model" placeholder="e.g. sh.mailchimp.configuration"/>
+                            <field name="connected_field" placeholder="e.g. sh_status"/>
+                            <field name="connected_value" placeholder="e.g. success"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+
+                        <!-- ── Entities Tab ── -->
+                        <page string="Entities" name="entities">
+                            <field name="entity_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name" placeholder="Label (e.g. Contacts)"/>
+                                    <field name="model_id"
+                                           options="{'no_create': True}"
+                                           domain="[('transient','=',False)]"/>
+                                    <field name="model_name" optional="hide"/>
+                                    <field name="domain" widget="domain"
+                                           options="{'model': 'model_name'}"
+                                           placeholder="[]"/>
+                                    <field name="icon" placeholder="fa-database"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- ── Log Configuration Tab ── -->
+                        <page string="Log Configuration" name="log_config">
+                            <group>
+                                <group string="Log Model">
+                                    <field name="log_model_id"
+                                           options="{'no_create': True}"
+                                           domain="[('transient','=',False)]"/>
+                                    <field name="log_model" placeholder="Fallback technical name"/>
+                                    <field name="log_date_field" placeholder="e.g. sh_date"/>
+                                    <field name="log_state_field" placeholder="e.g. sh_state"/>
+                                    <field name="log_error_value" placeholder="e.g. error"/>
+                                    <field name="log_message_field" placeholder="e.g. sh_message"/>
+                                </group>
+                                <group string="Queue Model (optional)">
+                                    <field name="queue_model" placeholder="e.g. sh.brevo.queue"/>
+                                    <field name="queue_state_field" placeholder="e.g. sh_current_state"/>
+                                    <field name="queue_pending_value"/>
+                                    <field name="queue_done_value"/>
+                                    <field name="queue_error_value"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- ── Actions Tab ── -->
+                        <page string="Dashboard &amp; Config Actions" name="actions">
+                            <group>
+                                <field name="dashboard_action"
+                                       placeholder="e.g. sh_brevo_connector.action_sh_brevo_dashboard"/>
+                                <field name="config_action"
+                                       placeholder="e.g. sh_mailchimp_connector.sh_mailchimp_configuration_action"/>
+                            </group>
+                        </page>
+
+                        <!-- ── Menu Configuration Tab ── -->
+                        <page string="Menu Configuration" name="menu_config">
+                            <group>
+                                <group string="Connector Folder">
+                                    <field name="menu_name" placeholder="e.g. Xero"/>
+                                    <field name="menu_sequence"/>
+                                    <field name="menu_parent_id" readonly="1"/>
+                                </group>
+                            </group>
+                            <div class="mt-2">
+                                <button name="action_sync_menus" type="object"
+                                        string="Sync Menus" class="btn btn-secondary" invisible="1"/>
+                            </div>
+                        </page>
+
+                        <!-- ── Legacy JSON Tab ── -->
+                        <page string="Legacy Entity JSON" name="legacy_json">
+                            <div class="alert alert-info" role="alert">
+                                This field is used as a fallback when no Entity records are defined
+                                in the Entities tab. Prefer the Entities tab for new connectors.
+                            </div>
+                            <field name="entity_definitions" nolabel="1" readonly="1"
+                                   placeholder='[{"label": "Contacts", "model": "mailing.contact", "domain": "[]", "icon": "fa-users"}]'/>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ACTION
+    ══════════════════════════════════════════════════════════ -->
+    <record id="sh_integration_connector_action" model="ir.actions.act_window">
+        <field name="name">Integration Connectors</field>
+        <field name="res_model">sh.integration.connector</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No connectors registered yet.
+            </p>
+            <p>
+                Install a connector module (Mailchimp, Brevo, Creditsafe) to see
+                its registration record appear here automatically.
+            </p>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         MENU ITEM
+    ══════════════════════════════════════════════════════════ -->
+    <menuitem
+        id="sh_integration_connector_menu"
+        name="Connectors"
+        parent="sh_base_config_root"
+        action="sh_integration_connector_action"
+        sequence="2"/>
+
+</odoo>

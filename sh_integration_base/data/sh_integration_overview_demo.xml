@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Demo data: sample mailing contacts with connector IDs so dashboard shows counts -->
+    <record id="demo_mailing_contact_mc_1" model="mailing.contact">
+        <field name="name">Alice Mailchimp</field>
+        <field name="email">alice.mc@demo.com</field>
+        <field name="sh_mailchimp_member_id">mc_demo_001</field>
+        <field name="sh_mailchimp_audience_id">aud_demo_001</field>
+    </record>
+    <record id="demo_mailing_contact_mc_2" model="mailing.contact">
+        <field name="name">Bob Mailchimp</field>
+        <field name="email">bob.mc@demo.com</field>
+        <field name="sh_mailchimp_member_id">mc_demo_002</field>
+        <field name="sh_mailchimp_audience_id">aud_demo_001</field>
+    </record>
+
+    <!-- Demo Brevo contact -->
+    <record id="demo_mailing_contact_bv_1" model="mailing.contact">
+        <field name="name">Carol Brevo</field>
+        <field name="email">carol.bv@demo.com</field>
+        <field name="sh_brevo_contact_id">bv_demo_001</field>
+    </record>
+
+    <!-- Demo mailing list — Mailchimp audience -->
+    <record id="demo_mailing_list_mc" model="mailing.list">
+        <field name="name">Demo Mailchimp Audience</field>
+        <field name="sh_mailchimp_audience_id">aud_demo_001</field>
+    </record>
+
+    <!-- Demo mailing list — Brevo list -->
+    <record id="demo_mailing_list_bv" model="mailing.list">
+        <field name="name">Demo Brevo List</field>
+        <field name="sh_brevo_list_id">bv_list_001</field>
+    </record>
+
+    <!-- Demo Mailchimp sync history logs -->
+    <record id="demo_mc_log_1" model="sh.mailchimp.sync.history">
+        <field name="sh_type">audience</field>
+        <field name="sh_state">success</field>
+        <field name="sh_message">Imported 2 contacts from Mailchimp</field>
+    </record>
+    <record id="demo_mc_log_2" model="sh.mailchimp.sync.history">
+        <field name="sh_type">campaigns</field>
+        <field name="sh_state">fail</field>
+        <field name="sh_message">Campaign sync failed: API rate limit exceeded</field>
+    </record>
+</odoo>

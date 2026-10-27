@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="sh_log_sequence" model="ir.sequence">
+        <field name="name">Log Sequence</field>
+        <field name="code">sh.log.seq</field>
+        <field name="prefix">LOG/</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False" />
+    </record>
+</odoo>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- List View -->
+    <record id="sh_queue_view_list" model="ir.ui.view">
+        <field name="name">sh.queue.view.list</field>
+        <field name="model">sh.queue</field>
+        <field name="arch" type="xml">
+            <list string="Queue list" decoration-warning="state=='delete'" decoration-primary="state=='draft'" decoration-success="state=='done'" decoration-danger="state=='error'">
+                <!--
+                    List header buttons live on connector primary views (e.g. WC)
+                    so inherit xpaths do not depend on this node existing.
+                    Reset is still available: form button + Action menu server action.
+                -->
+                <field name="name"></field>
+                <field name="remote_id"></field>
+                <field name="note"></field>
+                <field name="res_model"></field>
+                <field name="res_id"></field>
+                <field name="create_date"></field>
+                <field name="state" widget='badge' decoration-warning="state=='delete'" decoration-primary="state=='draft'" decoration-success="state=='done'" decoration-danger="state=='error'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="sh_queue_view_form" model="ir.ui.view">
+        <field name="name">sh.queue.view.form</field>
+        <field name="model">sh.queue</field>
+        <field name="arch" type="xml">
+            <form string="Queue">
+                <header>
+                    <button name="action_reset_to_draft"
+                            type="object"
+                            string="Reset to Draft"
+                            class="btn-secondary"
+                            icon="fa-undo"
+                            invisible="state != 'error'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,error,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box" invisible="not res_id or not res_model">
+                        <button name="view_record" type="object" class="oe_stat_button" icon="fa-search">
+                            <field name="res_model" string="View Record" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <group>
+                        <field name="name"></field>
+                        <field name="remote_id"></field>
+                        <!-- <field name="last_updated"></field> -->
+                        <field name="note"></field>
+                    </group>
+                    <group>
+                        <field name="res_model"></field>
+                        <field name="res_id"></field>
+                        <field name="queue_type"></field>
+                        <field name="sh_integration_base_id"></field>
+                    </group>
+                    <group>
+                        <field name="json_data"></field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search Filter -->
+    <record id="sh_queue_search_view" model="ir.ui.view">
+        <field name="name">sh.queue.search.view</field>
+        <field name="model">sh.queue</field>
+        <field name="arch" type="xml">
+            <search string=" Queue">
+                <field name="name"></field>
+                <field name="remote_id"></field>
+                <field name="json_data"></field>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]" />
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]" />
+                <filter string="Deleted" name="delete" domain="[('state', '=', 'delete')]" />
+                <filter string="Error" name="error" domain="[('state', '=', 'error')]" />
+                <group>
+                    <filter name="status_filter" string="Status" context="{'group_by':'state'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

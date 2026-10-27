@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sh_api_group" model="res.groups">
+        <field name="name">Integration Hub</field>
+        <!-- <field name="category_id" ref="base.module_category_hidden"/> -->
+        <field name="user_ids" eval="[Command.link(ref('base.user_admin'))]"/>
+    </record>
+</odoo>

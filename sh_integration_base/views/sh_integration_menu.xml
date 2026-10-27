@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- MENU:BASE -->
+    <menuitem
+        id="sh_base_config_root"
+        sequence="1"
+        name="Integration Hub"
+        web_icon="sh_integration_base,static/description/common connector.png"
+        groups="sh_integration_base.sh_api_group"/>
+    <!-- Overview -->
+    <menuitem
+        id="sh_API_integration_base_view_menuitem"
+        name="API Integration"
+        action="sh_base_config_form_view_action"
+        parent="sh_base_config_root"
+        groups="sh_integration_base.sh_api_group"
+        sequence="1"/>
+    <!-- Configuration -->
+    <menuitem
+        id="sh_base_config_form_view_menuitem"
+        name="Configuration"
+        parent="sh_base_config_root"
+        groups="sh_integration_base.sh_api_group"
+        sequence="90"/>
+
+    <!-- Integration Logs -->
+    <menuitem
+        id="sh_base_integration_log_view_menu"
+        name="Integration Logs"
+        action="sh_integration_view_action"
+        parent="sh_base_config_root"
+        sequence="3"
+        groups="sh_integration_base.sh_api_group"/>
+    <!-- Integration Queue -->
+    <menuitem
+        id="sh_base_queue_view_menu"
+        name="Integration Queue"
+        parent="sh_base_config_root"
+        sequence="4"
+        groups="sh_integration_base.sh_api_group"/>
+</odoo>

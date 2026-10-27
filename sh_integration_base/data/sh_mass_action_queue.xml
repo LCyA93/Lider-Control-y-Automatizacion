@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="import_from_queue_server_action" model="ir.actions.server">
+        <field name="name">Import From Queue</field>
+        <field name="model_id" ref="sh_integration_base.model_sh_queue"/>
+        <field name="binding_model_id" ref="sh_integration_base.model_sh_queue"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+            action = records._mass_action_import_from_queue()</field>
+    </record>
+    <record id="reset_queue_to_draft_server_action" model="ir.actions.server">
+        <field name="name">Reset to Draft</field>
+        <field name="model_id" ref="sh_integration_base.model_sh_queue"/>
+        <field name="binding_model_id" ref="sh_integration_base.model_sh_queue"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+action = records.action_reset_to_draft()
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="sh_integration_base.OverviewDashboard">
+<div class="sh_overview_root o_action">
+<div class="o_content sh_overview_content">
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         LOADING SPINNER
+    ══════════════════════════════════════════════════════════════════ -->
+    <t t-if="state.loading">
+        <div class="sh_overview_loading">
+            <i class="fa fa-spinner fa-spin fa-2x text-muted"/>
+            <p class="mt-2 text-muted">Loading…</p>
+        </div>
+    </t>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         OVERVIEW — KANBAN CARDS (one per connector)
+    ══════════════════════════════════════════════════════════════════ -->
+    <t t-if="!state.loading and state.view === 'overview'">
+
+        <!-- Page header -->
+        <div class="sh_page_header">
+            <h2 class="sh_page_title">
+                <i class="fa fa-plug me-2"/>Overview
+            </h2>
+            <span class="sh_page_count">
+                1-<t t-esc="state.connectors.length"/>/<t t-esc="state.connectors.length"/>
+            </span>
+        </div>
+
+        <!-- Kanban grid -->
+        <div class="sh_kanban_grid">
+            <t t-foreach="state.connectors" t-as="con" t-key="con.id">
+                <div class="sh_kanban_card">
+
+                    <!-- Top color accent strip -->
+                    <div class="sh_kcard_strip" t-attf-style="background: {{ avatarColor(con) }};"/>
+
+                    <!-- Card header: avatar + name/status + success ring -->
+                    <div class="sh_kcard_header">
+                        <t t-if="con.avatar_url">
+                            <div class="sh_kcard_avatar sh_kcard_avatar_img_wrap">
+                                <img t-att-src="con.avatar_url" alt="" class="sh_kcard_avatar_img"/>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="sh_kcard_avatar" t-attf-style="background: {{ avatarColor(con) }};">
+                                <t t-esc="avatarLetter(con)"/>
+                            </div>
+                        </t>
+                        <div class="sh_kcard_info">
+                            <div class="sh_kcard_name"><t t-esc="con.name"/></div>
+                            <div class="sh_kcard_subtitle">
+                                <span t-attf-class="sh_kcard_dot {{ con.connected ? 'dot_green' : 'dot_grey' }}"/>
+                                <t t-if="con.connected">Connected</t>
+                                <t t-else="">Disconnected</t>
+                                <t t-if="con.last_sync">
+                                    · last sync <t t-esc="formatRelativeTime(con.last_sync)"/>
+                                </t>
+                            </div>
+                        </div>
+                        <!-- SVG success rate ring -->
+                        <div class="sh_kcard_ring_wrap">
+                            <svg class="sh_ring_svg" viewBox="0 0 36 36">
+                                <circle class="sh_ring_bg" cx="18" cy="18" r="15.9" fill="none"/>
+                                <t t-if="successRate(con) !== null">
+                                    <circle class="sh_ring_fill" cx="18" cy="18" r="15.9" fill="none"
+                                        t-attf-stroke-dasharray="{{ successRate(con) }} {{ 100 - successRate(con) }}"
+                                        stroke-dashoffset="25"/>
+                                </t>
+                            </svg>
+                            <t t-if="successRate(con) !== null">
+                                <span class="sh_ring_pct"><t t-esc="successRate(con)"/>%</span>
+                            </t>
+                            <t t-else="">
+                                <span class="sh_ring_pct sh_ring_na">N/A</span>
+                            </t>
+                        </div>
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div class="sh_kcard_actions">
+                        <button class="btn sh_btn_primary" t-on-click="() => this.openDetail(con.id)">
+                            <i class="fa fa-bar-chart me-1"/>Dashboard
+                        </button>
+                        <t t-if="con.has_logs">
+                            <button class="btn sh_btn_outline" t-on-click="() => this.openLogs(con.id)">
+                                <i class="fa fa-clock-o me-1"/>Logs
+                            </button>
+                        </t>
+                        <t t-if="con.config_action">
+                            <button class="btn sh_btn_config" t-on-click="() => this.openConfig(con.id)">
+                                <i class="fa fa-cog me-1"/>
+                                <t t-esc="(con.menu_name || con.name.split(' ')[0]) + ' Config'"/>
+                            </button>
+                        </t>
+                    </div>
+
+                    <!-- Entity boxes grid — click opens filtered list view -->
+                    <div class="sh_kcard_entities">
+                        <t t-foreach="con.entities" t-as="ent" t-key="ent.label">
+                            <div class="sh_kent_box"
+                                 t-on-click="() => this.openEntity(ent.model, ent.domain)"
+                                 t-att-title="'Open ' + ent.label">
+                                <div class="sh_kent_icon_wrap">
+                                    <i t-attf-class="fa {{ ent.icon || 'fa-database' }} sh_kent_icon"/>
+                                </div>
+                                <div class="sh_kent_count"><t t-esc="ent.count"/></div>
+                                <div class="sh_kent_label"><t t-esc="ent.label"/></div>
+                                <span class="sh_kent_arrow">&#8599;</span>
+                            </div>
+                        </t>
+                    </div>
+
+                    <!-- Chart section: header + mini bars -->
+                    <div class="sh_kcard_chart_wrap">
+                        <div class="sh_chart_meta">
+                            <span class="sh_chart_title">
+                                <i class="fa fa-bar-chart"/>Weekly Sync
+                            </span>
+                            <div class="sh_chart_legend">
+                                <span class="sh_leg_dot sh_leg_ok"/>Success
+                                <span class="sh_leg_dot sh_leg_err"/>Errors
+                            </div>
+                            <span class="sh_api_calls_badge">
+                                <t t-esc="totalApiCalls(con).toLocaleString()"/> calls
+                            </span>
+                        </div>
+                        <div class="sh_mini_bars">
+                            <t t-foreach="miniBarHeights(con)" t-as="bar" t-key="bar_index">
+                                <div class="sh_mini_bar_col">
+                                    <div class="sh_mini_bar_tip"
+                                         t-att-data-tip="bar.label + ': ' + bar.success + ' ok / ' + bar.error + ' err'">
+                                        <div class="sh_mini_bar_stack"
+                                             t-attf-style="height: {{ bar.successH + bar.errorH }}px;">
+                                            <div class="sh_mini_err"
+                                                 t-attf-style="height:{{ bar.errorH }}px;"/>
+                                            <div class="sh_mini_ok"
+                                                 t-attf-style="height:{{ bar.successH }}px;"/>
+                                        </div>
+                                    </div>
+                                    <div class="sh_mini_label"><t t-esc="bar.label"/></div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                </div><!-- /.sh_kanban_card -->
+            </t>
+
+            <!-- Empty state when no connectors registered -->
+            <t t-if="state.connectors.length === 0">
+                <div class="sh_empty_kanban">
+                    <i class="fa fa-plug fa-3x text-muted mb-3"/>
+                    <p class="text-muted">No connector modules installed yet.</p>
+                    <p class="text-muted small">Install Mailchimp, Brevo, or Creditsafe connectors to see them here.</p>
+                </div>
+            </t>
+        </div>
+
+    </t><!-- /overview -->
+
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         DETAIL VIEW — full stats for selected connector
+    ══════════════════════════════════════════════════════════════════ -->
+    <t t-if="!state.loading and state.view === 'detail' and state.detail">
+        <t t-set="d" t-value="state.detail"/>
+
+        <!-- Breadcrumb / back -->
+        <div class="sh_detail_breadcrumb">
+            <button class="btn btn-sm sh_btn_back" t-on-click="() => this.backToOverview()">
+                <i class="fa fa-chevron-left me-1"/>Overview
+            </button>
+            <span class="sh_breadcrumb_sep">/</span>
+            <span class="sh_breadcrumb_cur"><t t-esc="d.name"/></span>
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <span t-attf-class="sh_connector_badge {{ d.connected ? 'connected' : 'disconnected' }}">
+                    <span class="sh_dot"/>
+                    <t t-if="d.connected">Connected</t>
+                    <t t-else="">Disconnected</t>
+                </span>
+                <button class="btn btn-sm btn-primary" t-on-click="() => this.refreshDetail()">
+                    <i class="fa fa-refresh me-1"/>Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Entity stat cards ── -->
+        <div class="sh_stat_cards_row">
+            <t t-foreach="d.entities" t-as="ent" t-key="ent.label">
+                <div class="sh_stat_card">
+                    <div class="sh_stat_label">
+                        <i t-attf-class="fa {{ ent.icon || 'fa-database' }} me-1"/>
+                        <t t-esc="ent.label"/>
+                    </div>
+                    <div class="sh_stat_total"><t t-esc="ent.count"/></div>
+                </div>
+            </t>
+        </div>
+
+        <!-- ── Charts row ── -->
+        <div class="sh_chart_row">
+            <div class="sh_chart_card sh_chart_bar">
+                <div class="sh_card_header">
+                    <i class="fa fa-bar-chart me-2 text-muted"/>
+                    Sync Activity — Last 7 Days
+                </div>
+                <div class="sh_chart_wrap">
+                    <canvas t-ref="detailSyncCanvas"/>
+                </div>
+            </div>
+            <div class="sh_chart_card sh_chart_doughnut">
+                <div class="sh_card_header">
+                    <i class="fa fa-pie-chart me-2 text-muted"/>
+                    Entity Distribution
+                </div>
+                <div class="sh_chart_wrap">
+                    <canvas t-ref="detailEntityCanvas"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Bottom row ── -->
+        <div class="sh_bottom_row">
+
+            <!-- Queue stats -->
+            <div class="sh_info_card">
+                <div class="sh_card_header">
+                    <i class="fa fa-list-ol me-2 text-muted"/>Queue Status
+                </div>
+                <t t-if="queueTotal(d.queue) > 0">
+                    <div class="sh_queue_bar">
+                        <div class="sh_q_done"    t-attf-style="width:{{ queuePct(d.queue,'done') }}%">
+                            <t t-if="queuePct(d.queue,'done') > 10">
+                                <t t-esc="d.queue.done"/> Done
+                            </t>
+                        </div>
+                        <div class="sh_q_pending" t-attf-style="width:{{ queuePct(d.queue,'pending') }}%">
+                            <t t-if="queuePct(d.queue,'pending') > 10">
+                                <t t-esc="d.queue.pending"/>
+                            </t>
+                        </div>
+                        <div class="sh_q_error"   t-attf-style="width:{{ queuePct(d.queue,'error') }}%">
+                            <t t-if="queuePct(d.queue,'error') > 10">
+                                <t t-esc="d.queue.error"/>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="sh_queue_legend">
+                        <span class="sh_ql_item">
+                            <span class="sh_ql_dot" style="background:#009879"/>
+                            Done: <b><t t-esc="d.queue.done"/></b>
+                        </span>
+                        <span class="sh_ql_item">
+                            <span class="sh_ql_dot" style="background:#f39c12"/>
+                            Pending: <b><t t-esc="d.queue.pending"/></b>
+                        </span>
+                        <span class="sh_ql_item">
+                            <span class="sh_ql_dot" style="background:#dc3545"/>
+                            Error: <b><t t-esc="d.queue.error"/></b>
+                        </span>
+                    </div>
+                </t>
+                <t t-else="">
+                    <p class="text-muted small mt-2">No queue data for this connector.</p>
+                </t>
+            </div>
+
+            <!-- Recent errors -->
+            <div class="sh_info_card">
+                <div class="sh_card_header">
+                    <i class="fa fa-exclamation-triangle me-2 text-muted"/>Recent Sync Errors
+                </div>
+                <t t-if="d.recent_errors.length === 0">
+                    <div class="sh_no_errors">
+                        <i class="fa fa-check-circle text-success me-2"/>
+                        <span class="text-muted">No recent errors — all syncs healthy!</span>
+                    </div>
+                </t>
+                <t t-foreach="d.recent_errors" t-as="err" t-key="err_index">
+                    <div class="sh_error_item">
+                        <i class="fa fa-times-circle sh_err_icon"/>
+                        <div class="sh_err_body">
+                            <div class="sh_err_msg"><t t-esc="err.message"/></div>
+                            <div class="sh_err_meta">
+                                <span class="sh_err_connector"><t t-esc="err.connector"/></span>
+                                <span class="sh_err_time"><t t-esc="formatRelativeTime(err.date)"/></span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+
+        </div><!-- /.sh_bottom_row -->
+
+    </t><!-- /detail -->
+
+</div><!-- /.o_content.sh_overview_content -->
+</div>
+</t>
+
+</templates>

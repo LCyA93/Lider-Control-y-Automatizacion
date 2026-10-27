@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Client action — renders OWL dashboard -->
+    <record id="sh_integration_overview_client_action" model="ir.actions.client">
+        <field name="name">Integration Overview</field>
+        <field name="tag">sh_integration_overview_action</field>
+    </record>
+
+    <!-- Overview menu — sequence 0 so it appears first -->
+    <menuitem
+        id="sh_integration_overview_menu"
+        name="Overview"
+        parent="sh_base_config_root"
+        action="sh_integration_overview_client_action"
+        groups="sh_integration_base.sh_api_group"
+        sequence="0"/>
+
+</odoo>

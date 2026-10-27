@@ -1,0 +1,13 @@
+body{}
+.sh_counter_section{}
+.sh_counter_section .sh_counter_box{}
+.sh_counter_section .sh_counter_box .sh_content_box{}
+.sh_counter_section .sh_counter_box .sh_content_box .sh_left .sh_title_text{}
+.sh_counter_section .sh_counter_box .sh_content_box .sh_left .sh_counter_num{}
+.sh_counter_section .sh_counter_box .sh_content_box .sh_right .sh_icon{}
+.sh_counter_section .sh_counter_box .sh_content_box .sh_right .sh_icon.icon_2{}
+.sh_counter_section .sh_counter_box .sh_content_box .sh_right .sh_icon.icon_3{}
+.sh_counter_section .sh_counter_box .sh_content_box .sh_right .sh_icon.icon_4{}
+.sh_counter_section .sh_counter_box .sh_content_box .sh_right .sh_icon svg{}
+
+
